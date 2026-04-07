@@ -8,6 +8,7 @@ namespace SunemedicPRO_Inventarios.Server.DTOs
         [StringLength(20, ErrorMessage = "El documento no debe superar los 20 caracteres")]
         public string Documento { get; set; } = null!;
 
+
         [Required(ErrorMessage = "Los nombres son obligatorios")]
         [StringLength(100, ErrorMessage = "Los nombres no deben superar los 100 caracteres")]
         public string Nombres { get; set; } = null!;
