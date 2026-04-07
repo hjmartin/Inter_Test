@@ -1,0 +1,223 @@
+.imgCont img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.mainContent {
+  position: relative;
+  display: block;
+  height: 92vh;
+  overflow: auto;
+}
+
+.moduleTittle {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 15rem;
+  padding-bottom: 2em;
+  margin: 0px auto;
+  align-items: center;
+  font-size: 2em;
+  color: #FFFFFF;
+  font-weight: 600;
+  background: #153D77;
+}
+
+  .moduleTittle span {
+    position: relative;
+    margin-left: 3rem;
+  }
+
+.moduleContent {
+  position: relative;
+  display: block;
+  width: 95%;
+  padding: 15px 0;
+  height: 78vh;
+  bottom: 5em;
+  margin: 0px auto;
+}
+
+.compCont {
+  position: relative;
+  display: flex;
+  width: 100%;
+  gap: 2em;
+  margin: 15px auto;
+}
+
+mat-card.mat-mdc-card.mdc-card.cardElement {
+  width: fit-content;
+}
+
+.contGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+  .contGrid .miniCard {
+    width: 24em;
+  }
+
+.contBlock {
+  position: relative;
+  display: block;
+  width: 50%;
+}
+
+  .contBlock .miniCard {
+    position: relative;
+    display: flex;
+    height: 8em;
+    margin-bottom: 15px;
+  }
+
+.card {
+  position: relative;
+  display: block;
+  padding: 10px;
+  background: #FFFFFF;
+  border: 1px solid #D2D2D2;
+  border-radius: 0.3em;
+}
+
+  .card .imgCont {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 20em;
+  }
+
+.miniCard {
+  position: relative;
+  display: block;
+  padding: 10px;
+  background: #FFFFFF;
+  border: 1px solid #D2D2D2;
+  border-radius: 0.3em;
+}
+
+  .miniCard span {
+    font-size: 1.3em;
+    font-weight: 400;
+  }
+
+.tarjeta {
+  background-color: #FFFFFF;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rowCard {
+  position: relative;
+  display: flex;
+  width: 100%;
+  margin: 14px auto;
+}
+
+  .rowCard .card {
+    position: relative;
+    display: flex;
+    margin: 0px 10px;
+    padding: 10px;
+  }
+
+.card span {
+  font-size: 1.3em;
+  font-weight: 400;
+}
+
+.rC2 .card {
+  width: 50%;
+}
+
+.rC3 .card {
+  width: 30%;
+}
+
+.cardCont {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  margin: 0px auto;
+  height: 100%;
+  justify-content: space-between;
+}
+
+.bttnCont {
+  position: absolute;
+  display: flex;
+  font-size: 1.5em;
+  color: #FFFFFF;
+  background: #2469CE;
+  border-radius: 50%;
+  padding: 0 0.5em;
+  left: 88%;
+  cursor: pointer;
+}
+
+.dateTxt {
+  font-size: 0.8em;
+  margin: 5px 0;
+}
+
+  .dateTxt span {
+    font-weight: 600 !important;
+  }
+
+.dataCont {
+  position: relative;
+  display: flex;
+  margin: 10px 0;
+  font-size: 1.9em;
+}
+
+.chartCont {
+  position: relative;
+  display: flex;
+  font-size: 0.8em;
+  margin: 5px 0px;
+}
+
+span.redLbl {
+  color: var(--bs-red);
+}
+
+span.grnLbl {
+  color: var(--bs-success);
+}
+
+@media (max-width: 1600px) {
+  .mainContent {
+    height: 90vh;
+  }
+}
+
+/* Responsive Dispositivos Moviles */
+@media (max-width: 768px) {
+  .moduleTittle {
+    font-size: 1.5em;
+    padding-left: 1rem;
+    height: auto;
+  }
+
+  .rowCard {
+    flex-direction: column;
+  }
+
+    .rowCard .card,
+    .contGrid,
+    .contBlock {
+      width: 100%;
+      margin: 10px 0;
+    }
+
+      .contGrid[_ngcontent-ng-c698830855] {
+        grid-template-columns: repeat(1, 1fr);
+      }
+}

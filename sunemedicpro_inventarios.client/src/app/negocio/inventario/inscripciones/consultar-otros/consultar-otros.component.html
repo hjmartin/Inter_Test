@@ -1,0 +1,48 @@
+<div class="container">
+  <header class="app-header">
+    <h1>Registros de otros compañeros</h1>
+  </header>
+
+  <div class="header-actions">
+    <label for="estudianteSelect"><strong>Seleccione un estudiante:</strong></label>
+
+    <select id="estudianteSelect" class="combo-select"
+            [(ngModel)]="estudianteSeleccionado"
+            (ngModelChange)="cargarDatosOtros()">
+      <option [ngValue]="null">-- Seleccione --</option>
+      <option *ngFor="let estudiante of listaEstudiantes" [ngValue]="estudiante.id">
+        {{ estudiante.nombres }} {{ estudiante.apellidos }} - {{ estudiante.documento }}
+      </option>
+    </select>
+  </div>
+
+  <div class="card combo-table-container">
+    <h2>Registros de {{ nombreEstudianteSeleccionado }}</h2>
+
+    <table class="combo-table" *ngIf="listaOtrasInscripciones.length > 0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre Grupo</th>
+          <th>Materia</th>
+          <th>Profesor</th>
+          <th>Créditos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of listaOtrasInscripciones">
+          <td>{{ item.id }}</td>
+          <td>{{ item.nombreGrupo }}</td>
+          <td>{{ item.materia }}</td>
+          <td>{{ item.profesor }}</td>
+          <td>{{ item.creditos }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="listaOtrasInscripciones.length === 0" class="no-results center-text">
+      <span class="material-icons">search_off</span>
+      <p>No se encontraron registros</p>
+    </div>
+  </div>
+</div>

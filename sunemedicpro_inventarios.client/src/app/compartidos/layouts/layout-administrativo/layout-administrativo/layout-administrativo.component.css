@@ -1,0 +1,230 @@
+.header {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 4em;
+}
+
+.headMenu {
+  position: relative;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  height: 100vh;
+}
+
+app-header-administrativo {
+  width: 100%;
+  position: relative;
+  display: flex;
+  height: 4em;
+}
+
+mat-sidenav#sidenavLayout {
+  border-top-right-radius: 0;
+  border-right-style: none;
+}
+
+span.slideBttn {
+  position: fixed;
+  display: flex;
+  font-size: 1.7em;
+  color: #FFFFFF;
+  padding: 13px;
+  margin: 0.2em;
+  cursor: pointer;
+  border-radius: 5px;
+  z-index: 2;
+  transition: .5s;
+}
+
+  span.slideBttn:hover {
+    background: #2c599b;
+  }
+
+.newTag {
+  position: absolute;
+  font-size: 0.6em;
+  padding: 0px 5px;
+  background: #3B7DDD;
+  border-radius: 2em;
+  color: #FFFFFF;
+  font-weight: 400;
+  left: 14em;
+}
+
+.example-container {
+  height: 100vh;
+}
+
+.headSlide {
+  position: relative;
+  display: flex;
+  width: 100%;
+  background: #153D77;
+  transition: .5s;
+  cursor: pointer;
+}
+
+  .headSlide:hover {
+    background: #2C599B;
+  }
+
+.logoCont {
+  position: relative;
+  display: flex;
+  width: 70%;
+  height: 4em;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.imgCont img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.userImg {
+  position: relative;
+  display: flex;
+  width: 6em;
+  margin: 10px auto;
+  border-radius: 50%;
+  overflow: hidden;
+  height: 6em;
+}
+
+  .userImg .imgCont img {
+    object-fit: cover;
+  }
+
+.userInfo {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userName {
+  font-size: 1.5em;
+}
+
+.expandName {
+  position: relative;
+  display: flex;
+  margin-left: 15px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.mat-drawer {
+  width: var(--mat-sidenav-container-width, 245px) !important;
+}
+
+mat-expansion-panel.mat-expansion-panel.subCategCont {
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  border-top-left-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.expandCont {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+app-view-administrativo {
+  width: 100%;
+}
+
+span.menuIcon {
+  position: relative;
+  color: #153D77;
+  margin-right: 10px;
+}
+
+.expandOption {
+  position: relative;
+  display: flex;
+  padding: 5px 15px;
+  cursor: pointer;
+  margin-left: 15px;
+  color: #6C757D;
+}
+
+  .expandOption:hover {
+    color: #000000;
+  }
+
+  .expandOption.activo {
+    font-weight: 600;
+    color: #000000;
+  }
+
+/* scroll */
+
+.menuBox {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  scrollbar-width: thin !important; /* Firefox */
+  scrollbar-color: rgba(0,0,0,0.3) transparent !important; /* Firefox */
+  overflow-y: overlay !important; /* Chrome/Edge: usa overlay */
+}
+
+/* ===== Scrollbar general ===== */
+
+  /* ===== WebKit (Chrome, Edge, Safari) ===== */
+  .menuBox::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
+  }
+
+  .menuBox::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+
+  .menuBox::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.3) !important;
+    border-radius: 999px !important;
+    min-height: 40px !important;
+  }
+
+    .menuBox::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(0,0,0,0.5) !important;
+    }
+
+  /* ===== Eliminar flechas (forzado) ===== */
+  .menuBox::-webkit-scrollbar-button:start:decrement,
+  .menuBox::-webkit-scrollbar-button:end:increment,
+  .menuBox::-webkit-scrollbar-button:single-button,
+  .menuBox::-webkit-scrollbar-button:vertical:decrement,
+  .menuBox::-webkit-scrollbar-button:vertical:increment,
+  .menuBox::-webkit-scrollbar-button:horizontal:decrement,
+  .menuBox::-webkit-scrollbar-button:horizontal:increment {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+    content: "" !important;
+  }
+
+
+
+/* Responsive Dispositivos Moviles */
+@media (max-width: 768px) {
+  .mat-drawer {
+    width: var(--mat-sidenav-container-width, 315px) !important;
+  }
+}
+
+.userName span {
+  font-size: 12px; /* o usa 'smaller', '0.8rem', lo que prefieras */
+  /* opcional: puedes ajustar color, peso, etc */
+  color: #333;
+}

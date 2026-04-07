@@ -1,0 +1,247 @@
+/* Botón principal */
+.btn-primary {
+  display: inline-block;
+  background-color: #1976d2;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+  .btn-primary:hover {
+    background-color: #0d47a1;
+  }
+
+/* HERO */
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 10%;
+  background: linear-gradient(135deg, #0d47a1, #1976d2);
+  color: white;
+  flex-wrap: wrap;
+}
+
+.hero-content {
+  max-width: 500px;
+}
+
+.hero-image img {
+  width: 250px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* SERVICIOS */
+.services {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 40px 10%;
+  background: white;
+  flex-wrap: wrap;
+}
+
+.service-card {
+  background: #f4f9ff;
+  border-radius: 15px;
+  padding: 20px;
+  width: 260px;
+  text-align: center;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+
+  .service-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .service-card img {
+    width: 60px;
+    margin-bottom: 15px;
+  }
+
+/* PRODUCTOS */
+.products {
+  padding: 40px 10%;
+  background: #e3f2fd;
+  text-align: center;
+}
+
+.product-list {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.product-card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  width: 260px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+}
+
+  .product-card img {
+    width: 60px;
+    margin-bottom: 15px;
+  }
+
+/* SOBRE NOSOTROS */
+.about {
+  padding: 40px 10%;
+  background: white;
+  text-align: center;
+}
+
+/* DOCTORES */
+.doctors {
+  padding: 40px 10%;
+  background: #f4f9ff;
+  text-align: center;
+}
+
+.doctor-list {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.doctor-card {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  width: 220px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+}
+
+  .doctor-card img {
+    width: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+
+/* CONTACTO */
+.contact {
+  padding: 40px 10%;
+  background: #e3f2fd;
+  text-align: center;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 400px;
+  margin: auto;
+}
+
+  .contact-form input,
+  .contact-form textarea {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+
+  .contact-form textarea {
+    resize: none;
+    height: 120px;
+  }
+
+
+.footer {
+  background: #0A3D62;
+  color: #fff;
+  padding: 40px 20px 20px;
+  font-family: Arial, sans-serif;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-column {
+  flex: 1 1 300px;
+}
+
+.footer h3 {
+  color: #f39c12;
+  margin-bottom: 15px;
+}
+
+.footer p {
+  margin: 8px 0;
+}
+
+.footer form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer input,
+.footer select {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+.footer button {
+  background: #f39c12;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+  .footer button:hover {
+    background: #d9830d;
+  }
+
+.footer .logo {
+  max-width: 150px;
+  margin-bottom: 10px;
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.2);
+  margin-top: 30px;
+  padding-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+  .footer-bottom nav a,
+  .footer-bottom .social a {
+    color: #f39c12;
+    margin-right: 15px;
+    text-decoration: none;
+  }
+
+    .footer-bottom nav a:hover,
+    .footer-bottom .social a:hover {
+      text-decoration: underline;
+    }

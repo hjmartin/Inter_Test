@@ -1,0 +1,162 @@
+/* You can add global styles to this file, and also import other style files */
+
+* {
+  font-family: Jost,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif;
+  padding: 0px;
+  margin: 0px;
+  list-style: none;
+  font-style: unset;
+  outline-style: none;
+  text-decoration: none;
+  border: none;
+  box-sizing: border-box;
+}
+
+
+/***prueba**/
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+/*******nada*/
+
+/* === FORMULARIOS EMPRESARIALES GLOBALES === */
+
+input, select, textarea {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #2196f3;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+  }
+
+  /* Input con error */
+  input.ng-invalid.ng-touched,
+  select.ng-invalid.ng-touched,
+  textarea.ng-invalid.ng-touched {
+    border-color: #e53935;
+    box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.2);
+  }
+
+/* Mensajes de error */
+.input-error {
+  color: #e53935;
+  font-size: 13px;
+  margin-top: 6px;
+  min-height: 16px;
+}
+
+/* Estilos generales */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+button {
+  background: #2196f3;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+  button:hover {
+    background: #1976d2;
+  }
+
+.form-card {
+  max-width: 40%;
+  margin: 40px auto;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e0e0e0;
+}
+/*
+    estilos personalizado para errores http
+*/
+.snackbar-error {
+  background-color: #d32f2f; /* rojo elegante */
+  color: white;
+  font-weight: bold;
+}
+
+.notification-menu {
+  width: 25em !important;
+  max-width: 25em !important;
+  background: #FFFFFF !important;
+}
+
+.mat-mdc-menu-content {
+  padding: 0 !important;
+}
+
+button.mat-mdc-menu-item.mat-focus-indicator {
+  padding: 20px 12px;
+}
+
+mat-sidenav#sidenavLayout {
+  box-shadow: 0 15px 6px rgba(0, 0, 0, 0.15);
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: #FFFFFF !important;
+}
+
+div.mat-mdc-select-panel {
+  background-color: #FFF !important;
+}
+
+.mat-datepicker-content-container {
+  background: #FFF;
+}
+.menuBox {
+  scrollbar-width: thin !important; /* Firefox */
+  scrollbar-color: rgba(0,0,0,0.3) transparent !important; /* Firefox */
+  overflow-y: overlay !important; /* Chrome/Edge: usa overlay */
+}
+
+  /* ===== Scrollbar en navegadores WebKit (Chrome, Edge, Safari) ===== */
+  .menuBox::-webkit-scrollbar {
+    width: 6px !important; /* Grosor */
+    height: 6px !important;
+  }
+
+  .menuBox::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+
+  .menuBox::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.3) !important;
+    border-radius: 999px !important;
+    min-height: 40px !important;
+  }
+
+    .menuBox::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(0,0,0,0.5) !important;
+    }
+
+  /* ===== Eliminar flechas de dirección ===== */
+  .menuBox::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: none !important;
+  }

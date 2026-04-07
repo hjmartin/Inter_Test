@@ -1,0 +1,74 @@
+<div class="headBarCont">
+  <div class="srchBar">
+    <input type="text" placeholder="Buscar..." />
+  </div>
+  <div class="iconBar">
+    <!--<div class="headIcon">
+    <span><i class="fa-solid fa-envelope"></i></span>
+  </div>-->
+    <!-- Botón de notificaciones -->
+    <button mat-icon-button [matMenuTriggerFor]="notificationsMenu" class="headBttn">
+      <mat-icon>notifications</mat-icon>
+      <span class="notification-badge"></span>
+    </button>
+
+    <!-- Menú con notificaciones estáticas -->
+    <mat-menu #notificationsMenu="matMenu" class="notification-menu">
+      <div class="notiHead">
+        <span>0 Nuevas Notificaciones</span>
+      </div>
+      <button mat-menu-item>
+        <mat-icon class="infoIcon" color="accent">info</mat-icon>
+        <div class="notInfo">
+          <span class="notTitle">Tienes una nueva actualización</span><br />
+          <span class="notDescrp">Aqui van las descripciones de la notificacion</span>
+        </div>
+        <div class="notiTime">
+          <span>Hace 0h</span>
+        </div>
+      </button>
+      <span class="separador"></span>
+      <button mat-menu-item>
+        <mat-icon class="mailIcon" color="accent">mail</mat-icon>
+        <div class="notInfo">
+          <span class="notTitle">Tienes una nueva actualización</span><br />
+          <span class="notDescrp">Aqui van las descripciones de la notificacion</span>
+        </div>
+        <div class="notiTime">
+          <span>Hace 0h</span>
+        </div>
+      </button>
+      <span class="separador"></span>
+      <button mat-menu-item>
+        <mat-icon class="alertIcon" color="accent">warning</mat-icon>
+        <div class="notInfo">
+          <span class="notTitle">Tienes una nueva actualización</span><br />
+          <span class="notDescrp">Aqui van las descripciones de la notificacion</span>
+        </div>
+        <div class="notiTime">
+          <span>Hace 0h</span>
+        </div>
+      </button>
+      <div class="notiFoot">
+        <span>Mostrar todas las notificaciones</span>
+      </div>
+    </mat-menu>
+    <button mat-icon-button [matMenuTriggerFor]="settingsMenu" class="headBttn">
+      <mat-icon>settings</mat-icon>
+    </button>
+    <mat-menu #settingsMenu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>account_circle</mat-icon>
+        <span>Perfil</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>settings</mat-icon>
+        <span>Configuración</span>
+      </button>
+      <button mat-menu-item (click)="seguridadService.logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Cerrar sesión</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>

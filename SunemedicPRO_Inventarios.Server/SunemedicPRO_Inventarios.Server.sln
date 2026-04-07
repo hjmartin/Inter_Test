@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunemedicPRO_Inventarios.Server", "SunemedicPRO_Inventarios.Server.csproj", "{1CFECFCF-EEAD-8543-215C-37009CAE23DC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1CFECFCF-EEAD-8543-215C-37009CAE23DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CFECFCF-EEAD-8543-215C-37009CAE23DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CFECFCF-EEAD-8543-215C-37009CAE23DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CFECFCF-EEAD-8543-215C-37009CAE23DC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9F825CD9-DD60-4005-AB4E-139FEC1B20C7}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,78 @@
+<mat-sidenav-container class="example-container">
+  <mat-sidenav #sidenav
+               [mode]="isMobile ? 'over' : 'side'"
+               [opened]="!isMobile"
+               id="sidenavLayout">
+    <div class="headSlide" routerLink="inventario/dashboard">
+      <div class="logoCont">
+        <div class="imgCont">
+          <img src="https://media.istockphoto.com/id/1321617070/es/vector/logotipo-m%C3%A9dico-de-salud.jpg?s=612x612&w=0&k=20&c=BsQIM8iPSDMgR8eQZNOjpd0Q2JuuhyM9dMOC7fFgHC4=" alt="Logo" routerLink="" />
+        </div>
+      </div>
+    </div>
+    <div class="menuBox">
+
+      <div class="userInfo">
+        <div class="userImg">
+          <div class="imgCont">
+            <img src="https://img.asmedia.epimg.net/resizer/v2/YNUVTC6RTFDWXJSISVCP3JR4HY.jpg?auth=db5a6087d1a4429ed009116a12a630b2d8c8f639ba7ce2c626707600a4668243&width=1472&height=828&smart=true" />
+          </div>
+        </div>
+        <div class="userName">
+          <span>{{correo}}</span>
+        </div>
+       
+      </div>
+      <div class="expandPanel">
+        <div class="expandCont">
+          <div class="expandName">
+            <span>Categoria</span>
+          </div>
+          <mat-accordion>
+            <mat-expansion-panel class="subCategCont">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <span class="menuIcon"><i class="fa-solid fa-house"></i></span>
+                  Panel Educativo
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="expandOption activo" routerLink="inventario/estudiantes/consultar" (click)="activarElemento('estudiantes/consultar')" [ngClass]="{ 'activo': opcionActiva === 'estudiantes/consultar' }">
+                <span>Perfil</span>
+              </div>
+              <div class="expandOption" routerLink="inventario/inscripciones" (click)="activarElemento('inscripciones')" [ngClass]="{ 'activo': opcionActiva === 'inscripciones' }">
+                <span>Inscribir Materias</span>
+              </div>
+              <div class="expandOption" routerLink="inventario/inscripcionesOtros" (click)="activarElemento('inscripcionesOtros')" [ngClass]="{ 'activo': opcionActiva === 'inscripcionesOtros' }">
+                <span>Compañeros de Clase</span>
+              </div>
+              <div class="expandOption" routerLink="inventario/inscripcionesOtrosRegistros" (click)="activarElemento('inscripcionesOtrosRegistros')" [ngClass]="{ 'activo': opcionActiva === 'inscripcionesOtrosRegistros' }">
+                <span>Registros de Otros Compañeros</span>
+              </div>
+
+            </mat-expansion-panel>
+            <mat-expansion-panel class="subCategCont">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <span class="menuIcon"><i class="fa-solid fa-house"></i></span>
+                  Auth
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="expandOption" (click)="seguridadService.logout()"><span>Cerrar Sesión</span></div>
+            </mat-expansion-panel>
+          
+          </mat-accordion>
+        </div>
+      </div>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <span class="slideBttn" mat-button (click)="sidenav.toggle()">
+      <i class="fa-solid fa-bars"></i>
+    </span>
+    <div class="headMenu">
+      <app-header-administrativo></app-header-administrativo>
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+

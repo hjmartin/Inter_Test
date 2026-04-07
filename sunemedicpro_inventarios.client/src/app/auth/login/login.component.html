@@ -1,0 +1,35 @@
+
+
+<div class="login-container">
+  <mat-card class="login-card" appearance="outlined">
+    <h1 class="title">Bienvenido a mi Universidad</h1>
+    
+    <form [formGroup]="formLogin" (ngSubmit)="loguear()" class="form-content">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Usuario</mat-label>
+        <input matInput formControlName="email" autocomplete="off">
+        <mat-error *ngIf="formLogin.get('email')?.invalid && formLogin.get('email')?.touched">
+          {{ obtenerMensajeErrorEmail() }}
+        </mat-error>
+      </mat-form-field>
+      <app-mostrar-errores [errores]="errores"></app-mostrar-errores>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Contraseña</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="pass">
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
+                [attr.aria-label]="'Mostrar/Ocultar contraseña'" type="button">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="formLogin.get('pass')?.invalid && formLogin.get('pass')?.touched">
+          {{ obtenerMensajeErrorPass() }}
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="btn-submit" type="submit" [disabled]="formLogin.invalid">
+        Iniciar Sesión
+      </button>
+    </form>
+
+  </mat-card>
+</div>
+

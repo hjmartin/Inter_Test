@@ -1,0 +1,56 @@
+<div class="container">
+  <header class="app-header">
+    <h1>Inscripciones</h1>
+  </header>
+
+  <div class="header-actions">
+    <label for="grupoSelect"><strong>Seleccione grupo de clase:</strong></label>
+
+    <select id="grupoSelect" class="combo-select" [(ngModel)]="grupoSeleccionado">
+      <option [ngValue]="null">-- Seleccione --</option>
+      <option *ngFor="let grupo of listaGrupos" [ngValue]="grupo.id">
+        {{ grupo.grupoInfo }}
+      </option>
+    </select>
+
+    <button class="btn-primary" (click)="guardarInscripcion()">
+      <span class="material-icons">save</span> Guardar
+    </button>
+  </div>
+
+  <div class="card combo-table-container">
+    <h2>Mis inscripciones</h2>
+
+    <table class="combo-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre Grupo</th>
+          <th>Materia</th>
+          <th>Profesor</th>
+          <th>Créditos</th>
+          <th>Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let inscripcion of listaInscripciones">
+          <td>{{ inscripcion.id }}</td>
+          <td>{{ inscripcion.nombreGrupo }}</td>
+          <td>{{ inscripcion.materia }}</td>
+          <td>{{ inscripcion.profesor }}</td>
+          <td>{{ inscripcion.creditos }}</td>
+          <td class="combo-actions">
+            <button class="btn-icon" title="Borrar" (click)="eliminarInscripcion(inscripcion)">
+              <span class="material-icons">delete</span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="listaInscripciones.length === 0" class="no-results">
+      <span class="material-icons">search_off</span>
+      <p>No se encontraron inscripciones</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+@SunemedicPRO_Inventarios.Server_HostAddress = http://localhost:5017
+
+GET {{SunemedicPRO_Inventarios.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
