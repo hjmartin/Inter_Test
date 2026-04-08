@@ -1,335 +1,242 @@
-/* Estilos generales */
-.container {
-  padding: 20px;
-  font-family: Arial, sans-serif;
+.page-shell {
+  --brand: #1456a1;
+  --brand-dark: #0f3f76;
+  --brand-soft: #eef5ff;
+  --ink: #1f2937;
+  --muted: #6b7280;
+  --line: #dbe4f0;
+  --surface: #ffffff;
+  padding: 24px 24px 24px 76px;
+  display: grid;
+  gap: 20px;
 }
 
-/* Iconos de Material */
-.material-icons {
-  font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;
+.hero {
+  background: linear-gradient(135deg, #124c90 0%, #2d7bdc 100%);
+  color: #fff;
+  border-radius: 20px;
+  padding: 24px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 16px;
+  box-shadow: 0 18px 40px rgba(20, 86, 161, 0.22);
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  opacity: 0.82;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+}
+
+.hero-copy {
+  margin: 8px 0 0;
+  max-width: 640px;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.hero-stat {
+  min-width: 140px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.14);
+  text-align: center;
+}
+
+.hero-stat-label {
+  display: block;
+  font-size: 0.8rem;
+  opacity: 0.88;
+  margin-bottom: 4px;
+}
+
+.hero-stat strong {
+  font-size: 2rem;
   line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
-  display: inline-block;
-  white-space: nowrap;
-  word-wrap: normal;
-  direction: ltr;
-  vertical-align: middle;
 }
 
-/* Encabezado */
-.app-header {
+.panel {
+  background: var(--surface);
+  border: 1px solid rgba(20, 86, 161, 0.08);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.06);
+}
+
+.panel-heading h2,
+.section-head h2 {
+  margin: 0 0 6px;
+  color: var(--ink);
+  font-size: 1.25rem;
+}
+
+.panel-heading p,
+.section-head p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.action-panel {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  padding: 15px 20px;
-  background: linear-gradient(135deg, #1976D2 0%, #2196F3 100%);
-  color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  gap: 16px;
 }
 
-  .app-header h1 {
-    margin: 0;
-    font-size: 1.8rem;
-  }
-
-.header-actions {
-  display: flex;
+.btn-primary {
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 12px;
+  background: var(--brand);
+  color: #fff;
+  display: inline-flex;
   align-items: center;
-  gap: 15px;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
 }
 
-/* Buscador */
-.search-box {
-  position: relative;
+.btn-primary:hover {
+  background: var(--brand-dark);
 }
 
-  .search-box input {
-    padding: 8px 15px 8px 35px;
-    border-radius: 20px;
-    border: 1px solid #ddd;
-    outline: none;
-    width: 250px;
-  }
-
-  .search-box .material-icons {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #757575;
-  }
-
-/* Tabla */
-.combo-table-container {
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  padding: 20px;
+.section-head {
+  margin-bottom: 16px;
 }
 
-.combo-table {
+.table-wrap {
+  overflow-x: auto;
+}
+
+.data-table {
   width: 100%;
+  min-width: 840px;
   border-collapse: collapse;
 }
 
-  .combo-table th {
-    background-color: #f5f5f5;
-    padding: 12px 15px;
-    text-align: left;
-    font-weight: 500;
-    color: #333;
-    border-bottom: 2px solid #ddd;
-  }
-
-  .combo-table td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #eee;
-  }
-
-  .combo-table tr:last-child td {
-    border-bottom: none;
-  }
-
-  .combo-table tr:hover {
-    background-color: #f9f9f9;
-  }
-
-/* Estilos específicos de columnas */
-.combo-name {
-  font-weight: 500;
-  color: #1976D2;
+.data-table th {
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  background: #f8fbff;
 }
 
-.combo-description {
-  color: #666;
-  max-width: 250px;
+.data-table td {
+  padding: 14px;
+  border-bottom: 1px solid #edf2f7;
+  color: var(--ink);
 }
 
-/* Chips de productos */
-.product-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
+.data-table tbody tr:hover {
+  background: #fbfdff;
 }
 
-.product-chip {
-  background-color: #e3f2fd;
-  color: #1976D2;
-  padding: 3px 10px;
-  border-radius: 16px;
-  font-size: 0.8rem;
-  white-space: nowrap;
-}
-
-.more-chip {
-  background-color: #eee;
-  color: #666;
-  padding: 3px 10px;
-  border-radius: 16px;
-  font-size: 0.8rem;
-}
-
-/* Estado */
-.combo-status .active {
-  background-color: #e8f5e9;
-  color: #4caf50;
+.data-badge {
+  display: inline-flex;
+  align-items: center;
   padding: 4px 10px;
-  border-radius: 16px;
-  font-size: 0.8rem;
-  cursor: pointer;
-  display: inline-block;
+  border-radius: 999px;
+  background: var(--brand-soft);
+  color: var(--brand-dark);
+  font-weight: 700;
 }
 
-.combo-status .inactive {
-  background-color: #ffebee;
-  color: #f44336;
-  padding: 4px 10px;
-  border-radius: 16px;
-  font-size: 0.8rem;
-  cursor: pointer;
-  display: inline-block;
-}
-
-/* Acciones */
-.combo-actions {
-  display: flex;
-  gap: 5px;
+.actions-cell {
+  width: 96px;
 }
 
 .btn-icon {
-  background: none;
-  border: none;
-  color: #666;
-  cursor: pointer;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  background: transparent;
+  color: #5b6472;
 }
 
-  .btn-icon:hover {
-    background-color: #e3f2fd;
-    color: #1976D2;
-  }
-
-  .btn-icon.danger:hover {
-    background-color: #ffebee;
-    color: #f44336;
-  }
-
-
-/* Sin resultados */
-.no-results {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
-  color: #666;
+.btn-icon:hover {
+  background: #eef5ff;
+  color: var(--brand);
 }
 
-  .no-results .material-icons {
-    font-size: 48px;
-    margin-bottom: 10px;
-    color: #bbb;
-  }
-
-  .no-results p {
-    margin: 0;
-    font-size: 1.1rem;
-  }
-
-/* Botón primario */
-.btn-primary {
-  background-color: #1976D2;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
+.btn-icon.danger:hover {
+  background: #fff0f0;
+  color: #c62828;
 }
-
-  .btn-primary:hover {
-    background-color: #1565c0;
-  }
 
 .paginator-container {
-  margin: 0 auto;
-  display: block;
-  width: fit-content;
+  margin-top: 16px;
 }
 
-/* Contenedor principal */
-.combo-table-container {
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+.empty-state {
+  min-height: 240px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 24px;
+  color: var(--muted);
 }
 
-/* Tabla principal */
-.combo-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
+.empty-state .material-icons {
+  font-size: 3rem;
+  color: #9db4d1;
+  margin-bottom: 8px;
 }
 
-  .combo-table th {
-    background: #f4f6f8;
-    font-weight: 600;
-    padding: 10px 12px;
-    text-align: left;
-  }
-
-  .combo-table td {
-    padding: 8px 12px;
-    border-bottom: 1px solid #e2e8f0;
-  }
-
-/* Chips de productos */
-.product-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+.empty-state h3 {
+  margin: 0;
+  color: var(--ink);
 }
 
-.product-chip,
-.more-chip {
-  background: #e6f0ff;
-  color: #1a73e8;
-  padding: 3px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  white-space: nowrap;
+.empty-state p {
+  margin: 8px 0 0;
+  max-width: 420px;
 }
 
-.more-chip {
-  background: #f0f0f0;
-  color: #555;
-}
-
-/* Acciones */
-.combo-actions button {
-  border: none;
-  background: none;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: background 0.2s;
-}
-
-  .combo-actions button:hover {
-    background: rgba(0, 0, 0, 0.05);
-  }
-
-/* Fila expandida */
-.expanded-row {
-  background: #fafbfc;
-  padding: 12px;
-}
-
-.innerCont {
-  position: relative;
-  padding: 15px;
-  width: 90%;
-  margin: 0 auto;
-  /* border: 1px solid; */
-  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
-}
-
-.inner-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-  .inner-table th {
-    background: #f4f6f8;
-    padding: 8px;
-    font-size: 13px;
-  }
-
-  .inner-table td {
-    padding: 6px 8px;
-    border-bottom: 1px solid #e2e8f0;
-  }
-
-/* Hover en fila */
-.combo-table tbody tr:hover td {
-  background: #f9fafb;
-}
-
-/* Botón de expandir */
 .material-icons {
   vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+  .page-shell {
+    padding: 72px 16px 16px;
+  }
+
+  .hero {
+    padding: 20px;
+    border-radius: 16px;
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .hero-stat {
+    width: 100%;
+  }
+
+  .panel {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .action-panel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-primary {
+    width: 100%;
+  }
 }

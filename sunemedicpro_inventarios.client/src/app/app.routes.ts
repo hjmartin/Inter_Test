@@ -15,7 +15,7 @@ export const routes: Routes = [
     path: '',
     component: LayoutLandingPageComponent,
     children: [
-      { path: '', component: HomePrincipalComponent },              // Ruta raíz → landing
+      { path: '', component: LoginComponent },              // Ruta raíz → landing
       { path: 'login', component: LoginComponent },        // Ruta login dentro del layout
       { path: 'registro', component: RegistroComponent }   // Registro dentro del mismo layout
     ]

@@ -11,14 +11,12 @@ namespace SunemedicPRO_Inventarios.Infrastructure.Repository
         private readonly Dictionary<Type, object> _repositories = new();
 
         public IUsuarioRepository UsuarioRepo { get; private set; }
-        public IEstudianteRepository EstudianteRepo { get; private set; }
         public IInscripcionRepository InscripcionRepo { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
             UsuarioRepo = new UsuarioRepository(_db);
-            EstudianteRepo = new EstudianteRepository(_db);
             InscripcionRepo = new InscripcionRepository(_db);
         }
 

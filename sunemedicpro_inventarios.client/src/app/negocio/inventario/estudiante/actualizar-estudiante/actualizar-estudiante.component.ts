@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormsModule, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { getErrorMensajeNumero, getErrorMensajeTexto, getErrorMensajeEmail, getErrorMensajeSelect } from '../../../../compartidos/funciones/extraerErrores';
 import { EstudianteService } from '../../../../services/inventarios/estudiante.service';
 import Swal from 'sweetalert2';
@@ -9,7 +9,7 @@ import { EstudianteUpdateDTO } from '../../../../dtos/inventarios/estudianteDTO'
 
 @Component({
   selector: 'app-actualizar-estudiante',
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink],
   templateUrl: './actualizar-estudiante.component.html',
   styleUrl: './actualizar-estudiante.component.css'
 })

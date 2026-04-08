@@ -8,6 +8,7 @@ using SunemedicPRO_Inventarios.Server.DTOs.Auth;
 using SunemedicPRO_Inventarios.Server.Entities;
 using SunemedicPRO_Inventarios.Server.Repositories.IRepository;
 using SunemedicPRO_Inventarios.Server.Security.IReository;
+using System.Data;
 
 namespace SunemedicPRO_Inventarios.Server.Application.Services
 {
@@ -29,23 +30,45 @@ namespace SunemedicPRO_Inventarios.Server.Application.Services
 
         public async Task<LoginResponseDTO> RegisterAsync(RegisterDto dto)
         {
+            Usuario? usuario = null;
             var email = dto.Email.Trim().ToLowerInvariant();
-            if (await _unitOfWork.UsuarioRepo.ExistsEmailAsync(email))
+            var documento = dto.Documento.Trim();
+            var nombres = dto.Nombres.Trim();
+            var apellidos = dto.Apellidos.Trim();
+
+            await _unitOfWork.ExecuteInTransactionAsync(async () =>
             {
-                throw new ApiException(StatusCodes.Status409Conflict, "Email ya registrado.");
-            }
+                if (await _unitOfWork.UsuarioRepo.ExistsEmailAsync(email))
+                {
+                    throw new ApiException(StatusCodes.Status409Conflict, "Email ya registrado.");
+                }
 
-            var usuario = new Usuario
-            {
-                Email = email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Pass),
-                Rol = "Estudiante"
-            };
+                if (await _unitOfWork.Repository<Estudiante>().AnyAsync(e => e.Documento == documento))
+                {
+                    throw new ApiException(StatusCodes.Status409Conflict, "El documento ya esta registrado.");
+                }
 
-            _unitOfWork.UsuarioRepo.Add(usuario);
-            await _unitOfWork.SaveAsync();
+                usuario = new Usuario
+                {
+                    Email = email,
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Pass),
+                    Rol = "Estudiante"
+                };
 
-            return _jwtTokenService.CreateToken(usuario);
+                var estudiante = new Estudiante
+                {
+                    Documento = documento,
+                    Nombres = nombres,
+                    Apellidos = apellidos,
+                    Usuario = usuario
+                };
+
+                _unitOfWork.UsuarioRepo.Add(usuario);
+                _unitOfWork.Repository<Estudiante>().Add(estudiante);
+                await _unitOfWork.SaveAsync();
+            }, IsolationLevel.ReadCommitted);
+
+            return _jwtTokenService.CreateToken(usuario!);
         }
 
         public async Task<LoginResponseDTO> LoginAsync(LoginRequestDTO dto)

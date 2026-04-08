@@ -149,7 +149,7 @@ export class ConsultarInscripcionComponent implements OnInit {
   eliminarInscripcion(inscripcion: InscripcionInfoDto): void {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: `¿Deseas eliminar el grupo "${inscripcion.nombreGrupo}"?`,
+      text: `¿Deseas eliminar la inscripción de "${inscripcion.materia}"?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

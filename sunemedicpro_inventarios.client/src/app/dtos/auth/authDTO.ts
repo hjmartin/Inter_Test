@@ -18,5 +18,8 @@ export interface UsuarioDTO {
 export interface RegisterDto {
   email: string;
   pass: string;
+  documento: string;
+  nombres: string;
+  apellidos: string;
 }
 

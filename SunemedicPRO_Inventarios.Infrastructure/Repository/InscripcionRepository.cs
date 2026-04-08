@@ -60,8 +60,7 @@ namespace SunemedicPRO_Inventarios.Infrastructure.Repository
                 .Select(g => new GrupoInfoDto
                 {
                     Id = g.Id,
-                    GrupoInfo = "Grupo: " + g.NombreGrupo +
-                                ", Materia: " + g.Materia.Nombre +
+                    GrupoInfo = "Materia: " + g.Materia.Nombre +
                                 ", Profesor: " + g.Profesor.Nombres + " " + g.Profesor.Apellidos
                 })
                 .AsNoTracking()

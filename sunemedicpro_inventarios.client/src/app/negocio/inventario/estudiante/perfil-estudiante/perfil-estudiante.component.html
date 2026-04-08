@@ -1,62 +1,80 @@
-<div class="container">
-  <header class="app-header">
-    <h1>Mi Perfil</h1>
-    <div class="header-actions">
-
-      @if(listaEstudiantes.length === 0){
-      <button class="btn-primary" [routerLink]="'/inventario/estudiantes/crear'">
-        <span class="material-icons">add</span> Crear Nuevo Estudiante
-      </button>
-      }
-
-    </div>
+<div class="page-shell">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Perfil academico</p>
+      <h1>Mi perfil de estudiante</h1>
+      <p class="hero-copy">Consulta tus datos registrados y gestiona tu perfil desde un solo lugar.</p>
+    </div>   
   </header>
 
-  <div class="card combo-table-container">
-    <table class="combo-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Documento</th>
-          <th>Nombres</th>
-          <th>Apellidos</th>
-          <th>Fecha Registro</th>
-          <th>Usuario ID</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let estudiante of listaEstudiantes;">
-          <td>{{ estudiante.id }}</td>
-          <td>{{ estudiante.documento }}</td>
-          <td>{{ estudiante.nombres }}</td>
-          <td>{{ estudiante.apellidos }}</td>
-          <td>{{ estudiante.fechaRegistro | date:'short' }}</td>
-          <td>{{ estudiante.usuarioId }}</td>
-          <td class="combo-actions">
-            <button class="btn-icon" title="Editar" [routerLink]="['/inventario/estudiantes/editar', estudiante.id]">
-              <span class="material-icons">edit</span>
-            </button>
-
-            <button class="btn-icon" title="Borrar" (click)="eliminarEstudiante(estudiante)">
-              <span class="material-icons">delete</span>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="paginator-container">
-      <mat-paginator [length]="totalRecords"
-                     [pageSize]="recordsPorPagina"
-                     [pageSizeOptions]="[5, 10, 20]"
-                     (page)="onPageChange($event)">
-      </mat-paginator>
+  <section class="panel action-panel" *ngIf="listaEstudiantes.length === 0">
+    <div class="panel-heading">
+      <h2>Aun no tienes perfil</h2>
+      <p>Crea tu perfil de estudiante para poder inscribirte y consultar tu informacion academica.</p>
     </div>
 
-    <div *ngIf="listaEstudiantes.length === 0" class="no-results">
-      <span class="material-icons">search_off</span>
-      <p>No se encontraron estudiantes</p>
+    <a class="btn-primary" [routerLink]="'/inventario/estudiantes/crear'">
+      <span class="material-icons">add</span>
+      Crear perfil de estudiante
+    </a>
+  </section>
+
+  <section class="panel table-panel">
+    <div class="section-head">
+      <div>
+        <h2>Datos registrados</h2>
+        <p>Vista resumida de tu informacion personal registrada en el sistema.</p>
+      </div>
     </div>
-  </div>
+
+    <div *ngIf="listaEstudiantes.length > 0; else emptyState" class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Documento</th>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Fecha de registro</th>
+            <th>Usuario</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let estudiante of listaEstudiantes">
+            <td>{{ estudiante.id }}</td>
+            <td><span class="data-badge">{{ estudiante.documento }}</span></td>
+            <td>{{ estudiante.nombres }}</td>
+            <td>{{ estudiante.apellidos }}</td>
+            <td>{{ estudiante.fechaRegistro | date:'short' }}</td>
+            <td>{{ estudiante.usuarioId }}</td>
+            <td class="actions-cell">
+              <button class="btn-icon" title="Editar" [routerLink]="['/inventario/estudiantes/editar', estudiante.id]">
+                <span class="material-icons">edit</span>
+              </button>
+              <button class="btn-icon danger" title="Borrar" (click)="eliminarEstudiante(estudiante)">
+                <span class="material-icons">delete</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="paginator-container">
+        <mat-paginator [length]="totalRecords"
+                       [pageSize]="recordsPorPagina"
+                       [pageSizeOptions]="[5, 10, 20]"
+                       (page)="onPageChange($event)">
+        </mat-paginator>
+      </div>
+    </div>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <span class="material-icons">school</span>
+        <h3>No se encontro un perfil registrado</h3>
+        <p>Cuando crees tu perfil de estudiante, tus datos apareceran aqui.</p>
+      </div>
+    </ng-template>
+  </section>
 </div>

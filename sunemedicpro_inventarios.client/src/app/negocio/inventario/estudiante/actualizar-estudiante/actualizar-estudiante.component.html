@@ -1,45 +1,51 @@
-<div class="form-card" fxLayout="column" fxLayoutGap="24px">
-  <h2>Editar Estudiante</h2>
+<div class="edit-shell">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Actualizacion de perfil</p>
+      <h1>Editar estudiante</h1>
+      <p class="hero-copy">Modifica tu informacion personal y guarda los cambios cuando estes listo.</p>
+    </div>
+  </header>
 
-  <form [formGroup]="formulario" (ngSubmit)="guardar()" fxLayout="column" fxLayoutGap="24px">
-
-    <!-- Documento -->
-    <div fxLayout="row" fxFlexFill>
-      <div fxFlex="100%">
-        <label for="documento">Documento *</label>
-        <input id="documento" type="text" formControlName="documento" placeholder="Ej: 1234567890" />
-        <span class="text-danger" *ngIf="formulario.get('documento')?.invalid && formulario.get('documento')?.touched">
-          {{ getErrorMensajeTexto(formulario, 'documento') }}
-        </span>
+  <section class="form-panel">
+    <div class="section-head">
+      <div>
+        <h2>Informacion del estudiante</h2>
+        <p>Revisa los campos antes de guardar para evitar inconsistencias en tu perfil.</p>
       </div>
     </div>
 
-    <!-- Nombres -->
-    <div fxLayout="row" fxFlexFill>
-      <div fxFlex="100%">
-        <label for="nombres">Nombres *</label>
-        <input id="nombres" type="text" formControlName="nombres" placeholder="Ej: Juan Carlos" />
-        <span class="text-danger" *ngIf="formulario.get('nombres')?.invalid && formulario.get('nombres')?.touched">
-          {{ getErrorMensajeTexto(formulario, 'nombres') }}
-        </span>
+    <form [formGroup]="formulario" (ngSubmit)="guardar()" class="edit-form">
+      <div class="field-grid">
+        <div class="field-block full-span">
+          <label for="documento">Documento</label>
+          <input id="documento" type="text" formControlName="documento" placeholder="Ej: 1234567890" />
+          <span class="input-error" *ngIf="formulario.get('documento')?.invalid && formulario.get('documento')?.touched">
+            {{ getErrorMensajeTexto(formulario, 'documento') }}
+          </span>
+        </div>
+
+        <div class="field-block">
+          <label for="nombres">Nombres</label>
+          <input id="nombres" type="text" formControlName="nombres" placeholder="Ej: Juan Carlos" />
+          <span class="input-error" *ngIf="formulario.get('nombres')?.invalid && formulario.get('nombres')?.touched">
+            {{ getErrorMensajeTexto(formulario, 'nombres') }}
+          </span>
+        </div>
+
+        <div class="field-block">
+          <label for="apellidos">Apellidos</label>
+          <input id="apellidos" type="text" formControlName="apellidos" placeholder="Ej: Perez Gomez" />
+          <span class="input-error" *ngIf="formulario.get('apellidos')?.invalid && formulario.get('apellidos')?.touched">
+            {{ getErrorMensajeTexto(formulario, 'apellidos') }}
+          </span>
+        </div>
       </div>
-    </div>
 
-    <!-- Apellidos -->
-    <div fxLayout="row" fxFlexFill>
-      <div fxFlex="100%">
-        <label for="apellidos">Apellidos *</label>
-        <input id="apellidos" type="text" formControlName="apellidos" placeholder="Ej: Pérez Gómez" />
-        <span class="text-danger" *ngIf="formulario.get('apellidos')?.invalid && formulario.get('apellidos')?.touched">
-          {{ getErrorMensajeTexto(formulario, 'apellidos') }}
-        </span>
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" [routerLink]="['/inventario/estudiantes/consultar']">Cancelar</button>
+        <button type="submit" class="btn-primary" [disabled]="formulario.invalid">Guardar cambios</button>
       </div>
-    </div>
-
-    <!-- Botón -->
-    <div fxLayoutAlign="end">
-      <button type="submit" [disabled]="formulario.invalid">Guardar</button>
-    </div>
-
-  </form>
+    </form>
+  </section>
 </div>

@@ -29,17 +29,21 @@ span.slideBttn {
   position: fixed;
   display: flex;
   font-size: 1.7em;
-  color: #FFFFFF;
+  color: #0f3f76;
   padding: 13px;
   margin: 0.2em;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(15, 63, 118, 0.18);
+  box-shadow: 0 8px 22px rgba(15, 63, 118, 0.18);
   z-index: 2;
   transition: .5s;
 }
 
   span.slideBttn:hover {
-    background: #2c599b;
+    background: #dbeafe;
+    color: #1456a1;
   }
 
 .newTag {

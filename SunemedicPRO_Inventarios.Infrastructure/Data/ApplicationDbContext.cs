@@ -14,7 +14,6 @@ namespace SunemedicPRO_Inventarios.Server.Data
         public DbSet<Estudiante> Estudiantes { get; set; }
         public DbSet<Profesor> Profesores { get; set; }
         public DbSet<Materia> Materias { get; set; }
-        public DbSet<ProfesorMateria> ProfesorMaterias { get; set; }
         public DbSet<GrupoClase> Grupos { get; set; }
         public DbSet<Inscripcion> Inscripciones { get; set; }
 
@@ -30,7 +29,6 @@ namespace SunemedicPRO_Inventarios.Server.Data
             modelBuilder.ApplyConfiguration(new InscripcionConfig());
             modelBuilder.ApplyConfiguration(new MateriaConfig());
             modelBuilder.ApplyConfiguration(new ProfesorConfig());
-            modelBuilder.ApplyConfiguration(new ProfesorMateriaConfig());
             modelBuilder.ApplyConfiguration(new UsuarioConfig());
         }
     }

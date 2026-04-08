@@ -33,14 +33,14 @@ namespace SunemedicPRO_Inventarios.Server.Application.Services
         public async Task<PagedResult<EstudianteDTO>> GetCurrentAsync(PaginacionDTO paginacionDTO)
         {
             var userId = GetRequiredUserId();
-            var estudiante = (await _unitOfWork.EstudianteRepo.ListAsync(e => e.UsuarioId == userId)).FirstOrDefault();
+            var estudiante = (await _unitOfWork.Repository<Estudiante>().ListAsync(e => e.UsuarioId == userId)).FirstOrDefault();
 
             if (estudiante is null)
             {
                 return new PagedResult<EstudianteDTO>();
             }
 
-            var queryable = _unitOfWork.EstudianteRepo
+            var queryable = _unitOfWork.Repository<Estudiante>()
                 .GetAll()
                 .Where(x => x.Id == estudiante.Id)
                 .OrderBy(x => x.Nombres);
@@ -60,7 +60,7 @@ namespace SunemedicPRO_Inventarios.Server.Application.Services
 
         public async Task<IReadOnlyList<EstudianteDTO>> GetAllAsync()
         {
-            return await _unitOfWork.EstudianteRepo
+            return await _unitOfWork.Repository<Estudiante>()
                 .GetAll()
                 .OrderBy(x => x.Nombres)
                 .ProjectTo<EstudianteDTO>(_mapper.ConfigurationProvider)
@@ -70,7 +70,7 @@ namespace SunemedicPRO_Inventarios.Server.Application.Services
         public async Task<EstudianteDTO> CreateAsync(EstudianteCreacionDTO dto)
         {
             var userId = GetRequiredUserId();
-            if (await _unitOfWork.EstudianteRepo.AnyAsync(e => e.UsuarioId == userId))
+            if (await _unitOfWork.Repository<Estudiante>().AnyAsync(e => e.UsuarioId == userId))
             {
                 throw new ApiException(StatusCodes.Status409Conflict, "El usuario ya tiene perfil de estudiante.");
             }
@@ -78,7 +78,7 @@ namespace SunemedicPRO_Inventarios.Server.Application.Services
             var estudiante = _mapper.Map<Estudiante>(dto);
             estudiante.UsuarioId = userId;
 
-            _unitOfWork.EstudianteRepo.Add(estudiante);
+            _unitOfWork.Repository<Estudiante>().Add(estudiante);
             await _unitOfWork.SaveAsync();
 
             return _mapper.Map<EstudianteDTO>(estudiante);
@@ -87,7 +87,7 @@ namespace SunemedicPRO_Inventarios.Server.Application.Services
         public async Task UpdateAsync(int id, EstudianteUpdateDTO dto)
         {
             var userId = GetRequiredUserId();
-            var estudiante = await _unitOfWork.EstudianteRepo.GetByIdAsync(id);
+            var estudiante = await _unitOfWork.Repository<Estudiante>().GetByIdAsync(id);
             if (estudiante is null)
             {
                 throw new ApiException(StatusCodes.Status404NotFound, "Estudiante no encontrado.");
@@ -99,13 +99,13 @@ namespace SunemedicPRO_Inventarios.Server.Application.Services
             }
 
             _mapper.Map(dto, estudiante);
-            _unitOfWork.EstudianteRepo.UpdateAsync(estudiante);
+            _unitOfWork.Repository<Estudiante>().UpdateAsync(estudiante);
             await _unitOfWork.SaveAsync();
         }
 
         public async Task<EstudianteDTO> GetByIdAsync(int id)
         {
-            var estudiante = await _unitOfWork.EstudianteRepo.GetByIdAsync(id);
+            var estudiante = await _unitOfWork.Repository<Estudiante>().GetByIdAsync(id);
             if (estudiante is null)
             {
                 throw new ApiException(StatusCodes.Status404NotFound, "Estudiante no encontrado.");
@@ -117,7 +117,7 @@ namespace SunemedicPRO_Inventarios.Server.Application.Services
         public async Task DeleteAsync(int id)
         {
             var userId = GetRequiredUserId();
-            var estudiante = await _unitOfWork.EstudianteRepo.GetByIdAsync(id);
+            var estudiante = await _unitOfWork.Repository<Estudiante>().GetByIdAsync(id);
             if (estudiante is null)
             {
                 throw new ApiException(StatusCodes.Status404NotFound, "Estudiante no encontrado.");
@@ -134,7 +134,7 @@ namespace SunemedicPRO_Inventarios.Server.Application.Services
                 throw new ApiException(StatusCodes.Status409Conflict, "No puedes eliminar tu perfil porque tienes inscripciones activas.");
             }
 
-            _unitOfWork.EstudianteRepo.Remove(estudiante);
+            _unitOfWork.Repository<Estudiante>().Remove(estudiante);
             await _unitOfWork.SaveAsync();
         }
 

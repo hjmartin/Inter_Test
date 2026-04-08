@@ -117,7 +117,7 @@ export class PerfilEstudianteComponent implements OnInit {
 
     Swal.fire({
       title: '¿Estás seguro?',
-      text: `¿Deseas eliminar el producto "${estudiante.nombres}"?`,
+      text: `¿Deseas eliminar el estudainte "${estudiante.nombres}"?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -128,12 +128,12 @@ export class PerfilEstudianteComponent implements OnInit {
       if (result.isConfirmed) {
         this.estudianteService.borrar(estudiante.id).subscribe({
           next: () => {
-            Swal.fire('¡Eliminado!', 'El producto ha sido eliminado.', 'success');
+            Swal.fire('¡Eliminado!', 'El estudiante ha sido eliminado.', 'success');
             // Recargar la lista de productos
             this.CargarEstudiantes();
           },
           error: () => {
-            Swal.fire('Error', 'Hubo un problema al eliminar el producto.', 'error');
+            Swal.fire('Error', 'Hubo un problema al eliminar el estudiante.', 'error');
           }
         });
       }

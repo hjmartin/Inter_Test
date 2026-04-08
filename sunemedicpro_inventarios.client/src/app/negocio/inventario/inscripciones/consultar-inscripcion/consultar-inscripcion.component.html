@@ -1,56 +1,81 @@
-<div class="container">
-  <header class="app-header">
-    <h1>Inscripciones</h1>
+<div class="page-shell">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Gestion academica</p>
+      <h1>Inscripciones</h1>
+      <p class="hero-copy">Selecciona un grupo y administra tus materias inscritas del periodo actual.</p>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-label">Total registradas</span>
+      <strong>{{ listaInscripciones.length }}</strong>
+    </div>
   </header>
 
-  <div class="header-actions">
-    <label for="grupoSelect"><strong>Seleccione grupo de clase:</strong></label>
-
-    <select id="grupoSelect" class="combo-select" [(ngModel)]="grupoSeleccionado">
-      <option [ngValue]="null">-- Seleccione --</option>
-      <option *ngFor="let grupo of listaGrupos" [ngValue]="grupo.id">
-        {{ grupo.grupoInfo }}
-      </option>
-    </select>
-
-    <button class="btn-primary" (click)="guardarInscripcion()">
-      <span class="material-icons">save</span> Guardar
-    </button>
-  </div>
-
-  <div class="card combo-table-container">
-    <h2>Mis inscripciones</h2>
-
-    <table class="combo-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre Grupo</th>
-          <th>Materia</th>
-          <th>Profesor</th>
-          <th>Créditos</th>
-          <th>Opciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let inscripcion of listaInscripciones">
-          <td>{{ inscripcion.id }}</td>
-          <td>{{ inscripcion.nombreGrupo }}</td>
-          <td>{{ inscripcion.materia }}</td>
-          <td>{{ inscripcion.profesor }}</td>
-          <td>{{ inscripcion.creditos }}</td>
-          <td class="combo-actions">
-            <button class="btn-icon" title="Borrar" (click)="eliminarInscripcion(inscripcion)">
-              <span class="material-icons">delete</span>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div *ngIf="listaInscripciones.length === 0" class="no-results">
-      <span class="material-icons">search_off</span>
-      <p>No se encontraron inscripciones</p>
+  <section class="panel action-panel">
+    <div class="panel-heading">
+      <h2>Nueva inscripcion</h2>
+      <p>Elige el grupo de clase disponible y guarda tu registro.</p>
     </div>
-  </div>
+
+    <div class="action-grid">
+      <div class="field-block">
+        <label for="grupoSelect">Grupo de clase</label>
+        <select id="grupoSelect" class="combo-select" [(ngModel)]="grupoSeleccionado">
+          <option [ngValue]="null">Selecciona un grupo</option>
+          <option *ngFor="let grupo of listaGrupos" [ngValue]="grupo.id">
+            {{ grupo.grupoInfo }}
+          </option>
+        </select>
+      </div>
+
+      <button class="btn-primary" (click)="guardarInscripcion()">
+        <span class="material-icons">save</span>
+        Guardar inscripcion
+      </button>
+    </div>
+  </section>
+
+  <section class="panel table-panel">
+    <div class="section-head">
+      <div>
+        <h2>Mis inscripciones</h2>
+        <p>Consulta las materias que ya tienes registradas y elimina una si necesitas ajustarla.</p>
+      </div>
+    </div>
+
+    <div *ngIf="listaInscripciones.length > 0; else emptyState" class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Materia</th>
+            <th>Profesor</th>
+            <th>Creditos</th>
+            <th>Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let inscripcion of listaInscripciones">
+            <td>{{ inscripcion.id }}</td>
+            <td>{{ inscripcion.materia }}</td>
+            <td>{{ inscripcion.profesor }}</td>
+            <td><span class="credit-pill">{{ inscripcion.creditos }}</span></td>
+            <td class="actions-cell">
+              <button class="btn-icon danger" title="Eliminar" (click)="eliminarInscripcion(inscripcion)">
+                <span class="material-icons">delete</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <span class="material-icons">school</span>
+        <h3>Aun no tienes inscripciones</h3>
+        <p>Selecciona un grupo de clase arriba para registrar tu primera materia.</p>
+      </div>
+    </ng-template>
+  </section>
 </div>

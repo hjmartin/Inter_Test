@@ -64,10 +64,13 @@ export class AuthService {
     return true;
   }
 
-  logout() {
+  logout(redirigir: boolean = true) {
     localStorage.removeItem(this.llaveToken);
     localStorage.removeItem(this.llaveExpiracion);
-    this.router.navigate(['']);
+
+    if (redirigir) {
+      this.router.navigate(['']);
+    }
   }
 
   obtenerRol(): string {
@@ -79,8 +82,11 @@ export class AuthService {
     }
   }
 
-  register(dto: RegisterDto): Observable<any> {
-    return this.http.post<any>(`${this.urlBase}/register`, dto);
+  register(dto: RegisterDto): Observable<LoginResponseDTO> {
+    return this.http.post<LoginResponseDTO>(`${this.urlBase}/register`, dto)
+      .pipe(
+        tap(resp => this.guardarToken(resp))
+      );
   }
 
 }

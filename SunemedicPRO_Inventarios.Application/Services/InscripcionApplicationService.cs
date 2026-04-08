@@ -41,6 +41,7 @@ namespace SunemedicPRO_Inventarios.Server.Application.Services
                     }
 
                     var count = await _unitOfWork.InscripcionRepo.CountByEstudiantePeriodoAsync(estudiante.Id, periodo);
+
                     if (count >= 3)
                     {
                         throw new ApiException(StatusCodes.Status400BadRequest, "El estudiante ya tiene 3 materias en este período.");
@@ -98,7 +99,9 @@ namespace SunemedicPRO_Inventarios.Server.Application.Services
         {
             await GetRequiredEstudianteAsync();
 
-            var estudianteObjetivo = await _unitOfWork.EstudianteRepo.GetByIdAsync(estudianteId);
+            var estudianteObjetivo = await
+                _unitOfWork.Repository<Estudiante>()
+                .GetByIdAsync(estudianteId);
             if (estudianteObjetivo is null)
             {
                 throw new ApiException(StatusCodes.Status404NotFound, "Estudiante no encontrado.");
@@ -174,7 +177,7 @@ namespace SunemedicPRO_Inventarios.Server.Application.Services
                 throw new ApiException(StatusCodes.Status401Unauthorized, "Usuario no autenticado.");
             }
 
-            var estudiante = (await _unitOfWork.EstudianteRepo.ListAsync(e => e.UsuarioId == _currentUserService.UserId.Value))
+            var estudiante = (await _unitOfWork.Repository<Estudiante>().ListAsync(e => e.UsuarioId == _currentUserService.UserId.Value))
                 .FirstOrDefault();
 
             if (estudiante is null)

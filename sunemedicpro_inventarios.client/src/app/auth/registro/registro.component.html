@@ -1,23 +1,47 @@
-
-
 <div class="login-container">
   <mat-card class="login-card" appearance="outlined">
     <h1 class="title">Registrarme</h1>
 
     <form [formGroup]="formRegistro" (ngSubmit)="registrar()" class="form-content">
       <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Usuario</mat-label>
+        <mat-label>Documento</mat-label>
+        <input matInput formControlName="documento" autocomplete="off">
+        <mat-error *ngIf="formRegistro.get('documento')?.invalid && formRegistro.get('documento')?.touched">
+          {{ obtenerMensajeErrorDocumento() }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Nombres</mat-label>
+        <input matInput formControlName="nombres" autocomplete="off">
+        <mat-error *ngIf="formRegistro.get('nombres')?.invalid && formRegistro.get('nombres')?.touched">
+          {{ obtenerMensajeErrorNombres() }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Apellidos</mat-label>
+        <input matInput formControlName="apellidos" autocomplete="off">
+        <mat-error *ngIf="formRegistro.get('apellidos')?.invalid && formRegistro.get('apellidos')?.touched">
+          {{ obtenerMensajeErrorApellidos() }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Correo</mat-label>
         <input matInput formControlName="email" autocomplete="off">
         <mat-error *ngIf="formRegistro.get('email')?.invalid && formRegistro.get('email')?.touched">
           {{ obtenerMensajeErrorEmail() }}
         </mat-error>
       </mat-form-field>
+
       <app-mostrar-errores [errores]="errores"></app-mostrar-errores>
+
       <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Contraseña</mat-label>
+        <mat-label>Contrasena</mat-label>
         <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="pass">
         <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
-                [attr.aria-label]="'Mostrar/Ocultar contraseña'" type="button">
+                [attr.aria-label]="'Mostrar/Ocultar contrasena'" type="button">
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
         <mat-error *ngIf="formRegistro.get('pass')?.invalid && formRegistro.get('pass')?.touched">
@@ -26,10 +50,8 @@
       </mat-form-field>
 
       <button mat-raised-button color="primary" class="btn-submit" type="submit" [disabled]="formRegistro.invalid">
-        Iniciar Sesión
+        Registrarme
       </button>
     </form>
-
   </mat-card>
 </div>
-

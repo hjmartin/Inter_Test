@@ -7,7 +7,6 @@ namespace SunemedicPRO_Inventarios.Server.Repositories.IRepository
     public interface IUnitOfWork
     {
         IUsuarioRepository UsuarioRepo { get; }
-        IEstudianteRepository EstudianteRepo { get; }
         IInscripcionRepository InscripcionRepo { get; }
         IRepository<T> Repository<T>() where T : class;
 

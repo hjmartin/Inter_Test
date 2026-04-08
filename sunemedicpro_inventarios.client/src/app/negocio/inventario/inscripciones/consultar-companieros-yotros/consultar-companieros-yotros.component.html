@@ -1,39 +1,42 @@
-<div class="container">
-  <header class="app-header">
-    <h1>Compañeros</h1>
+<div class="page-shell">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Comunidad academica</p>
+      <h1>Companeros de clase</h1>
+      <p class="hero-copy">Consulta los nombres de los estudiantes con quienes compartes materias inscritas.</p>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-label">Companeros</span>
+      <strong>{{ listaCompanieros.length }}</strong>
+    </div>
   </header>
 
-  <!-- Nuevo bloque debajo del título -->
-  <!--<div class="header-actions">
-    <label for="grupoSelect"><strong>Seleccione grupo de clase:</strong></label>
-
-    <select id="grupoSelect" class="combo-select" [(ngModel)]="estudianteSeleccionado">
-      <option [ngValue]="null">-- Seleccione --</option>
-      <option *ngFor="let estudiante of listaEstudiantes" [ngValue]="estudiante.id">
-        {{ `${estudiante.nombres} ${estudiante.apellidos}` }}
-      </option>
-    </select>
-
-
-  </div>-->
-
-  <div class="card combo-table-container">
-    <table class="combo-table">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of listaCompanieros">
-          <td>{{ item }}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div *ngIf="listaCompanieros.length === 0" class="no-results">
-      <span class="material-icons">search_off</span>
-      <p>No se encontraron compañeros</p>
+  <section class="panel list-panel">
+    <div class="section-head">
+      <div>
+        <h2>Listado compartido</h2>
+        <p>Esta vista muestra solo nombres, tal como lo solicita la regla funcional del ejercicio.</p>
+      </div>
     </div>
-  </div>
+
+    <div *ngIf="listaCompanieros.length > 0; else emptyState" class="people-grid">
+      <article class="person-card" *ngFor="let item of listaCompanieros">
+        <div class="avatar-badge">
+          <span class="material-icons">person</span>
+        </div>
+        <div>
+          <h3>{{ item }}</h3>
+          <p>Companero inscrito en al menos una de tus clases.</p>
+        </div>
+      </article>
+    </div>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <span class="material-icons">groups</span>
+        <h3>No se encontraron companeros</h3>
+        <p>Cuando compartas clases con otros estudiantes, sus nombres apareceran aqui.</p>
+      </div>
+    </ng-template>
+  </section>
 </div>

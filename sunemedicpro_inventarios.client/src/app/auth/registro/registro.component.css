@@ -1,48 +1,55 @@
-
 .login-container {
-  height: 100vh;
+  min-height: 100vh;
   background: linear-gradient(to right, #005c97, #363795);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding: 94px 16px 32px;
+  box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .login-card {
-  width: 400px;
-  padding: 2rem;
+  width: min(100%, 460px);
+  padding: 24px 28px 28px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.6s ease-in-out;
   border-radius: 12px;
+  margin: 0 auto;
 }
 
 .title {
   text-align: center;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-size: clamp(1.8rem, 2vw, 2.4rem);
+  line-height: 1.15;
+  margin: 0 0 1.5rem;
   color: #004080;
 }
 
 .form-content {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 0.35rem;
 }
 
 .full-width {
   width: 100%;
 }
-/*Boton Iniciar Sesión*/
+
 .btn-submit {
   width: 100%;
+  min-height: 48px;
+  margin-top: 0.5rem;
   background-color: #004080;
   transition: background-color 0.3s ease;
 }
 
-  .btn-submit:hover {
-    background-color: #0066cc;
-    color: white;
-  }
-/*Olvide Contraseña*/
+.btn-submit:hover {
+  background-color: #0066cc;
+  color: white;
+}
+
 .link-olvido {
   text-align: center;
   margin-top: 1rem;
@@ -52,19 +59,46 @@
   transition: color 0.3s ease;
 }
 
-  .link-olvido:hover {
-    color: #0066cc;
-    text-decoration: underline;
+.link-olvido:hover {
+  color: #0066cc;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    padding: 84px 12px 24px;
   }
+
+  .login-card {
+    width: 100%;
+    padding: 20px 18px 24px;
+    border-radius: 10px;
+  }
+
+  .title {
+    margin-bottom: 1.1rem;
+  }
+}
+
+@media (max-height: 800px) {
+  .login-container {
+    padding-top: 86px;
+    padding-bottom: 24px;
+  }
+
+  .login-card {
+    padding-top: 20px;
+  }
+}
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: translateY(8px);
   }
 
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: translateY(0);
   }
 }
