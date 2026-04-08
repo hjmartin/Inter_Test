@@ -21,8 +21,6 @@ namespace SunemedicPRO_Inventarios.Infrastructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
-            services.AddScoped<IInscripcionRepository, InscripcionRepository>();
-            services.AddScoped<IEstudianteRepository, EstudianteRepository>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddHttpContextAccessor();

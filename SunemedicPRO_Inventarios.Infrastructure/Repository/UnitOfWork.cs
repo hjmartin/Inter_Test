@@ -8,6 +8,7 @@ namespace SunemedicPRO_Inventarios.Infrastructure.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _db;
+        private readonly Dictionary<Type, object> _repositories = new();
 
         public IUsuarioRepository UsuarioRepo { get; private set; }
         public IEstudianteRepository EstudianteRepo { get; private set; }
@@ -19,6 +20,19 @@ namespace SunemedicPRO_Inventarios.Infrastructure.Repository
             UsuarioRepo = new UsuarioRepository(_db);
             EstudianteRepo = new EstudianteRepository(_db);
             InscripcionRepo = new InscripcionRepository(_db);
+        }
+
+        public IRepository<T> Repository<T>() where T : class
+        {
+            var type = typeof(T);
+
+            if (!_repositories.TryGetValue(type, out var repository))
+            {
+                repository = new Repository<T>(_db);
+                _repositories[type] = repository;
+            }
+
+            return (IRepository<T>)repository;
         }
 
         public void Dispose()

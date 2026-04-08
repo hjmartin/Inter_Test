@@ -13,19 +13,13 @@ namespace SunemedicPRO_Inventarios.Server.Application.Services
 {
     public class InscripcionApplicationService : IInscripcionApplicationService
     {
-        private readonly IInscripcionRepository _inscripcionRepository;
-        private readonly IRepository<GrupoClase> _grupoRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserService _currentUserService;
 
         public InscripcionApplicationService(
-            IInscripcionRepository inscripcionRepository,
-            IRepository<GrupoClase> grupoRepository,
             IUnitOfWork unitOfWork,
             ICurrentUserService currentUserService)
         {
-            _inscripcionRepository = inscripcionRepository;
-            _grupoRepository = grupoRepository;
             _unitOfWork = unitOfWork;
             _currentUserService = currentUserService;
         }
@@ -39,43 +33,34 @@ namespace SunemedicPRO_Inventarios.Server.Application.Services
                     var estudiante = await GetRequiredEstudianteAsync();
                     var periodo = dto.Periodo.Trim().ToUpperInvariant();
 
-                    if (string.IsNullOrWhiteSpace(periodo))
-                    {
-                        throw new ApiException(StatusCodes.Status400BadRequest, "El período es obligatorio.");
-                    }
 
-                    var grupo = await _grupoRepository.GetByIdAsync(dto.GrupoClaseId);
+                    var grupo = await _unitOfWork.Repository<GrupoClase>().GetByIdAsync(dto.GrupoClaseId);
                     if (grupo is null)
                     {
                         throw new ApiException(StatusCodes.Status404NotFound, "Grupo no encontrado.");
                     }
 
-                    if (!await _inscripcionRepository.HasCupoAsync(dto.GrupoClaseId))
-                    {
-                        throw new ApiException(StatusCodes.Status400BadRequest, "No hay cupos disponibles en este grupo.");
-                    }
-
-                    var count = await _inscripcionRepository.CountByEstudiantePeriodoAsync(estudiante.Id, periodo);
+                    var count = await _unitOfWork.InscripcionRepo.CountByEstudiantePeriodoAsync(estudiante.Id, periodo);
                     if (count >= 3)
                     {
                         throw new ApiException(StatusCodes.Status400BadRequest, "El estudiante ya tiene 3 materias en este período.");
                     }
 
                     var yaTieneConEseProfesor =
-                        await _inscripcionRepository.ExistsProfesorEnPeriodoAsync(estudiante.Id, grupo.ProfesorId, periodo);
+                        await _unitOfWork.InscripcionRepo.ExistsProfesorEnPeriodoAsync(estudiante.Id, grupo.ProfesorId, periodo);
                     if (yaTieneConEseProfesor)
                     {
                         throw new ApiException(StatusCodes.Status400BadRequest, "Ya tiene clases con el mismo profesor en este período.");
                     }
 
                     var yaInscritoMismaMateria =
-                        await _inscripcionRepository.ExistsMateriaEnPeriodoAsync(estudiante.Id, grupo.MateriaId, periodo);
+                        await _unitOfWork.InscripcionRepo.ExistsMateriaEnPeriodoAsync(estudiante.Id, grupo.MateriaId, periodo);
                     if (yaInscritoMismaMateria)
                     {
                         throw new ApiException(StatusCodes.Status400BadRequest, "Ya está inscrito en esa materia en este período.");
                     }
 
-                    _inscripcionRepository.Add(new Inscripcion
+                    _unitOfWork.InscripcionRepo.Add(new Inscripcion
                     {
                         EstudianteId = estudiante.Id,
                         GrupoClaseId = dto.GrupoClaseId,
@@ -94,13 +79,13 @@ namespace SunemedicPRO_Inventarios.Server.Application.Services
         public async Task<IReadOnlyList<string>> VerCompanerosAsync(int grupoId)
         {
             var estudiante = await GetRequiredEstudianteAsync();
-            return await _inscripcionRepository.GetNombresCompanerosAsync(grupoId, estudiante.Id);
+            return await _unitOfWork.InscripcionRepo.GetNombresCompanerosAsync(grupoId, estudiante.Id);
         }
 
         public async Task<IReadOnlyList<InscripcionPublicaDto>> VerRegistrosDeOtroAsync(int estudianteId, string periodo)
         {
             var periodoNormalizado = periodo.Trim().ToUpperInvariant();
-            var suyas = await _inscripcionRepository.GetByEstudiantePeriodoAsync(estudianteId, periodoNormalizado);
+            var suyas = await _unitOfWork.InscripcionRepo.GetByEstudiantePeriodoAsync(estudianteId, periodoNormalizado);
 
             return suyas.Select(i => new InscripcionPublicaDto
             {
@@ -126,7 +111,7 @@ namespace SunemedicPRO_Inventarios.Server.Application.Services
         {
             var estudiante = await GetRequiredEstudianteAsync();
             var periodoNormalizado = periodo.Trim().ToUpperInvariant();
-            var countMaterias = await _inscripcionRepository.CountByEstudiantePeriodoAsync(estudiante.Id, periodoNormalizado);
+            var countMaterias = await _unitOfWork.InscripcionRepo.CountByEstudiantePeriodoAsync(estudiante.Id, periodoNormalizado);
             var usados = countMaterias * 3;
 
             return new CreditosDto

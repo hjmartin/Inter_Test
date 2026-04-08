@@ -9,6 +9,7 @@ namespace SunemedicPRO_Inventarios.Server.Repositories.IRepository
         IUsuarioRepository UsuarioRepo { get; }
         IEstudianteRepository EstudianteRepo { get; }
         IInscripcionRepository InscripcionRepo { get; }
+        IRepository<T> Repository<T>() where T : class;
 
         void Dispose();
         Task SaveAsync();

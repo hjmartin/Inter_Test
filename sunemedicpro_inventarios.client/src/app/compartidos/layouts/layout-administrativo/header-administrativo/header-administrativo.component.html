@@ -1,16 +1,11 @@
 <div class="headBarCont">
-  <div class="srchBar">
-    <input type="text" placeholder="Buscar..." />
-  </div>
+
   <div class="iconBar">
     <!--<div class="headIcon">
     <span><i class="fa-solid fa-envelope"></i></span>
   </div>-->
     <!-- Botón de notificaciones -->
-    <button mat-icon-button [matMenuTriggerFor]="notificationsMenu" class="headBttn">
-      <mat-icon>notifications</mat-icon>
-      <span class="notification-badge"></span>
-    </button>
+
 
     <!-- Menú con notificaciones estáticas -->
     <mat-menu #notificationsMenu="matMenu" class="notification-menu">
@@ -53,9 +48,7 @@
         <span>Mostrar todas las notificaciones</span>
       </div>
     </mat-menu>
-    <button mat-icon-button [matMenuTriggerFor]="settingsMenu" class="headBttn">
-      <mat-icon>settings</mat-icon>
-    </button>
+
     <mat-menu #settingsMenu="matMenu">
       <button mat-menu-item>
         <mat-icon>account_circle</mat-icon>
