@@ -1,0 +1,15 @@
+﻿namespace RegistroEstudiantil.Domain.Entities
+{
+    public class Materia
+    {
+        public int Id { get; set; }
+        public string Codigo { get; set; } = null!;
+        public string Nombre { get; set; } = null!;
+        public int Creditos { get; set; } = 3; // Regla: cada materia = 3 créditos
+
+      
+        public ICollection<GrupoClase> Grupos { get; set; } = new List<GrupoClase>();
+    }
+}
+
+

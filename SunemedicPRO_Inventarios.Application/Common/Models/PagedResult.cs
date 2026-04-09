@@ -1,8 +1,0 @@
-namespace SunemedicPRO_Inventarios.Server.Application.Common.Models
-{
-    public class PagedResult<T>
-    {
-        public IReadOnlyList<T> Items { get; set; } = [];
-        public int TotalCount { get; set; }
-    }
-}

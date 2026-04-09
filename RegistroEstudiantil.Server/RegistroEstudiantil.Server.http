@@ -1,0 +1,7 @@
+﻿@RegistroEstudiantil.Server_HostAddress = http://localhost:5017
+
+GET {{RegistroEstudiantil.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+

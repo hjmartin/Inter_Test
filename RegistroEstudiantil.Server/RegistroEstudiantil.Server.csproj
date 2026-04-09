@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <SpaRoot>..\RegistroEstudiantil.Client</SpaRoot>
+    <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
+    <SpaProxyServerUrl>https://localhost:65161</SpaProxyServerUrl>
+    <UserSecretsId>13ec2f6b-ff1a-4ced-83ea-da797bcf758b</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
+      <Version>9.*-*</Version>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RegistroEstudiantil.Application\RegistroEstudiantil.Application.csproj" />
+    <ProjectReference Include="..\RegistroEstudiantil.Infrastructure\RegistroEstudiantil.Infrastructure.csproj" />
+    <ProjectReference Include="..\RegistroEstudiantil.Client\RegistroEstudiantil.Client.esproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Application\**\*.cs" />
+    <Compile Remove="Data\**\*.cs" />
+    <Compile Remove="DTOs\**\*.cs" />
+    <Compile Remove="Entities\**\*.cs" />
+    <Compile Remove="Helpers\AutoMapperProfiles.cs" />
+    <Compile Remove="Helpers\HttpContextExtensions.cs" />
+    <Compile Remove="Helpers\IQueryableExtensions.cs" />
+    <Compile Remove="Infrastructure\**\*.cs" />
+    <Compile Remove="Migrations\**\*.cs" />
+    <Compile Remove="Repositories\**\*.cs" />
+    <Compile Remove="Security\IReository\IUsuarioRepository2.cs" />
+    <Compile Remove="Security\JwtTokenService.cs" />
+    <Compile Remove="Security\IReository\IJwtTokenService.cs" />
+    <Compile Remove="Security\UsuarioRepository2.cs" />
+    <Compile Remove="Services\**\*.cs" />
+  </ItemGroup>
+
+</Project>
+

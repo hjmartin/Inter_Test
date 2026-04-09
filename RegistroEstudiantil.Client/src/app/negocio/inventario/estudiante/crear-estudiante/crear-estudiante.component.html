@@ -1,0 +1,53 @@
+﻿<mat-card class="mat-elevation-z4">
+  <mat-card-title>Crear Estudiante</mat-card-title>
+  <mat-card-content>
+    <div class="form-card" fxLayout="column" fxLayoutGap="24px">
+
+      <form [formGroup]="formulario" (ngSubmit)="guardar()" fxLayout="column" fxLayoutGap="24px">
+
+        <!-- Documento -->
+        <div fxLayout="row" fxFlexFill>
+          <div fxFlex="100%">
+            <label for="documento">Documento *</label>
+            <input id="documento" type="text" formControlName="documento"
+                   placeholder="Ej: 1234567890" />
+            <span class="text-danger" *ngIf="formulario.get('documento')?.invalid && formulario.get('documento')?.touched">
+              {{ getErrorMensajeTexto(formulario, 'documento') }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Nombres -->
+        <div fxLayout="row" fxFlexFill>
+          <div fxFlex="100%">
+            <label for="nombres">Nombres *</label>
+            <input id="nombres" type="text" formControlName="nombres"
+                   placeholder="Ej: Juan Carlos" />
+            <span class="text-danger" *ngIf="formulario.get('nombres')?.invalid && formulario.get('nombres')?.touched">
+              {{ getErrorMensajeTexto(formulario, 'nombres') }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Apellidos -->
+        <div fxLayout="row" fxFlexFill>
+          <div fxFlex="100%">
+            <label for="apellidos">Apellidos *</label>
+            <input id="apellidos" type="text" formControlName="apellidos"
+                   placeholder="Ej: PÃ©rez GÃ³mez" />
+            <span class="text-danger" *ngIf="formulario.get('apellidos')?.invalid && formulario.get('apellidos')?.touched">
+              {{ getErrorMensajeTexto(formulario, 'apellidos') }}
+            </span>
+          </div>
+        </div>
+
+        <!-- El boton se bloquea mientras falte informacion o el formulario tenga errores. -->
+        <div fxLayoutAlign="end">
+          <button type="submit" mat-raised-button color="primary" [disabled]="!puedeEnviarFormulario()">Guardar</button>
+        </div>
+
+      </form>
+    </div>
+  </mat-card-content>
+</mat-card>
+
