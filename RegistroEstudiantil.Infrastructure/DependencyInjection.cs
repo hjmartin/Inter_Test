@@ -22,6 +22,7 @@ namespace RegistroEstudiantil.Infrastructure
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
+            services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddHttpContextAccessor();
 

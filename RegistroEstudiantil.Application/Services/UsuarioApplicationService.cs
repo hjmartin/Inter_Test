@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using RegistroEstudiantil.Application.Common.Exceptions;
 using RegistroEstudiantil.Application.Common.Security;
 using RegistroEstudiantil.Application.DTOs.Auth;
-using RegistroEstudiantil.Application.Services.Interfaces;
-using RegistroEstudiantil.Domain.Entities;
 using RegistroEstudiantil.Application.Interfaces.Persistence;
 using RegistroEstudiantil.Application.Interfaces.Security;
+using RegistroEstudiantil.Application.Services.Interfaces;
+using RegistroEstudiantil.Domain.Entities;
 using System.Data;
 
 namespace RegistroEstudiantil.Application.Services
@@ -16,15 +14,18 @@ namespace RegistroEstudiantil.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IJwtTokenService _jwtTokenService;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IPasswordHasher _passwordHasher;
 
         public UsuarioApplicationService(
             IUnitOfWork unitOfWork,
             IJwtTokenService jwtTokenService,
-            ICurrentUserService currentUserService)
+            ICurrentUserService currentUserService,
+            IPasswordHasher passwordHasher)
         {
             _unitOfWork = unitOfWork;
             _jwtTokenService = jwtTokenService;
             _currentUserService = currentUserService;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<LoginResponseDTO> RegisterAsync(RegisterDto dto)
@@ -39,28 +40,16 @@ namespace RegistroEstudiantil.Application.Services
             {
                 if (await _unitOfWork.UsuarioRepo.ExistsEmailAsync(email))
                 {
-                    throw new ApiException(StatusCodes.Status409Conflict, "Email ya registrado.");
+                    throw new ConflictException("Email ya registrado.");
                 }
 
                 if (await _unitOfWork.Repository<Estudiante>().AnyAsync(e => e.Documento == documento))
                 {
-                    throw new ApiException(StatusCodes.Status409Conflict, "El documento ya esta registrado.");
+                    throw new ConflictException("El documento ya esta registrado.");
                 }
 
-                usuario = new Usuario
-                {
-                    Email = email,
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Pass),
-                    Rol = "Estudiante"
-                };
-
-                var estudiante = new Estudiante
-                {
-                    Documento = documento,
-                    Nombres = nombres,
-                    Apellidos = apellidos,
-                    Usuario = usuario
-                };
+                usuario = Usuario.CrearEstudiante(email, _passwordHasher.Hash(dto.Pass));
+                var estudiante = Estudiante.Crear(documento, nombres, apellidos, usuario);
 
                 _unitOfWork.UsuarioRepo.Add(usuario);
                 _unitOfWork.Repository<Estudiante>().Add(estudiante);
@@ -75,17 +64,11 @@ namespace RegistroEstudiantil.Application.Services
             var email = dto.Email.Trim().ToLowerInvariant();
             var usuario = await _unitOfWork.UsuarioRepo.GetByEmailAsync(email);
 
-            if (usuario is null || !BCrypt.Net.BCrypt.Verify(dto.Pass, usuario.PasswordHash))
+            if (usuario is null || !_passwordHasher.Verify(dto.Pass, usuario.PasswordHash))
             {
-                var errores = new List<IdentityError>
-                {
-                    new()
-                    {
-                        Description = "Credenciales incorrectas"
-                    }
-                };
-
-                throw new ApiException(StatusCodes.Status400BadRequest, "Credenciales incorrectas.", errores);
+                throw new ValidationException(
+                    "Credenciales incorrectas.",
+                    new { errores = new[] { "Credenciales incorrectas" } });
             }
 
             return _jwtTokenService.CreateToken(usuario);
@@ -95,7 +78,7 @@ namespace RegistroEstudiantil.Application.Services
         {
             if (!_currentUserService.UserId.HasValue)
             {
-                throw new ApiException(StatusCodes.Status401Unauthorized, "Usuario no autenticado.");
+                throw new UnauthorizedException("Usuario no autenticado.");
             }
 
             return new CurrentUserDto
@@ -107,6 +90,3 @@ namespace RegistroEstudiantil.Application.Services
         }
     }
 }
-
-
-

@@ -8,6 +8,16 @@
         public string Rol { get; set; } = "Estudiante"; // Estudiante | Admin, etc.
 
         public Estudiante? Estudiante { get; set; }
+
+        public static Usuario CrearEstudiante(string email, string passwordHash)
+        {
+            return new Usuario
+            {
+                Email = email,
+                PasswordHash = passwordHash,
+                Rol = "Estudiante"
+            };
+        }
     }
 }
 

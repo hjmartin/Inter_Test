@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using RegistroEstudiantil.Application.Common.Exceptions;
 using RegistroEstudiantil.Application.Common.Security;
 using RegistroEstudiantil.Application.DTOs;
+using RegistroEstudiantil.Application.Interfaces.Persistence;
 using RegistroEstudiantil.Application.Services.Interfaces;
 using RegistroEstudiantil.Domain.Entities;
-using RegistroEstudiantil.Application.Interfaces.Persistence;
+using RegistroEstudiantil.Domain.Services;
 using System.Data;
 
 namespace RegistroEstudiantil.Application.Services
@@ -25,55 +24,34 @@ namespace RegistroEstudiantil.Application.Services
 
         public async Task CrearAsync(InscripcionCreateDto dto)
         {
-            try
+            await _unitOfWork.ExecuteInTransactionAsync(async () =>
             {
-                await _unitOfWork.ExecuteInTransactionAsync(async () =>
+                var estudiante = await GetRequiredEstudianteAsync();
+                var periodo = dto.Periodo.Trim().ToUpperInvariant();
+                var grupo = await _unitOfWork.Repository<GrupoClase>().GetByIdAsync(dto.GrupoClaseId);
+
+                if (grupo is null)
                 {
-                    var estudiante = await GetRequiredEstudianteAsync();
-                    var periodo = dto.Periodo.Trim().ToUpperInvariant();
+                    throw new NotFoundException("Grupo no encontrado.");
+                }
 
+                var count = await _unitOfWork.InscripcionRepo.CountByEstudiantePeriodoAsync(estudiante.Id, periodo);
+                var yaTieneConEseProfesor =
+                    await _unitOfWork.InscripcionRepo.ExistsProfesorEnPeriodoAsync(estudiante.Id, grupo.ProfesorId, periodo);
+                var yaInscritoMismaMateria =
+                    await _unitOfWork.InscripcionRepo.ExistsMateriaEnPeriodoAsync(estudiante.Id, grupo.MateriaId, periodo);
 
-                    var grupo = await _unitOfWork.Repository<GrupoClase>().GetByIdAsync(dto.GrupoClaseId);
-                    //if (grupo is null)
-                    //{
-                    //    throw new ApiException(StatusCodes.Status404NotFound, "Grupo no encontrado.");
-                    //}
+                InscripcionRules.ValidarNuevaInscripcion(count, yaTieneConEseProfesor, yaInscritoMismaMateria);
 
-                    var count = await _unitOfWork.InscripcionRepo.CountByEstudiantePeriodoAsync(estudiante.Id, periodo);
+                _unitOfWork.InscripcionRepo.Add(new Inscripcion
+                {
+                    EstudianteId = estudiante.Id,
+                    GrupoClaseId = dto.GrupoClaseId,
+                    Periodo = periodo
+                });
 
-                    if (count >= 3)
-                    {
-                        throw new ApiException(StatusCodes.Status400BadRequest, "El estudiante ya tiene 3 materias en este periodo.");
-                    }
-
-                    var yaTieneConEseProfesor =
-                        await _unitOfWork.InscripcionRepo.ExistsProfesorEnPeriodoAsync(estudiante.Id, grupo.ProfesorId, periodo);
-                    if (yaTieneConEseProfesor)
-                    {
-                        throw new ApiException(StatusCodes.Status400BadRequest, "Ya tiene clases con el mismo profesor en este periodo.");
-                    }
-
-                    var yaInscritoMismaMateria =
-                        await _unitOfWork.InscripcionRepo.ExistsMateriaEnPeriodoAsync(estudiante.Id, grupo.MateriaId, periodo);
-                    if (yaInscritoMismaMateria)
-                    {
-                        throw new ApiException(StatusCodes.Status400BadRequest, "Ya esta inscrito en esa materia en este periodo.");
-                    }
-
-                    _unitOfWork.InscripcionRepo.Add(new Inscripcion
-                    {
-                        EstudianteId = estudiante.Id,
-                        GrupoClaseId = dto.GrupoClaseId,
-                        Periodo = periodo
-                    });
-
-                    await _unitOfWork.SaveAsync();
-                }, IsolationLevel.Serializable);
-            }
-            catch (DbUpdateException)
-            {
-                throw new ApiException(StatusCodes.Status409Conflict, "La inscripcion no pudo completarse por concurrencia. Intenta nuevamente.");
-            }
+                await _unitOfWork.SaveAsync();
+            }, IsolationLevel.Serializable);
         }
 
         public async Task<IReadOnlyList<string>> VerCompanerosAsync(int grupoId)
@@ -98,12 +76,10 @@ namespace RegistroEstudiantil.Application.Services
         {
             await GetRequiredEstudianteAsync();
 
-            var estudianteObjetivo = await
-                _unitOfWork.Repository<Estudiante>()
-                .GetByIdAsync(estudianteId);
+            var estudianteObjetivo = await _unitOfWork.Repository<Estudiante>().GetByIdAsync(estudianteId);
             if (estudianteObjetivo is null)
             {
-                throw new ApiException(StatusCodes.Status404NotFound, "Estudiante no encontrado.");
+                throw new NotFoundException("Estudiante no encontrado.");
             }
 
             return await _unitOfWork.InscripcionRepo.GetInscripcionesByEstudianteAsync(estudianteId);
@@ -130,12 +106,12 @@ namespace RegistroEstudiantil.Application.Services
 
             if (inscripcion is null)
             {
-                throw new ApiException(StatusCodes.Status404NotFound, "Inscripcion no encontrada.");
+                throw new NotFoundException("Inscripcion no encontrada.");
             }
 
             if (inscripcion.EstudianteId != estudiante.Id)
             {
-                throw new ApiException(StatusCodes.Status403Forbidden, "No puedes eliminar esta inscripcion.");
+                throw new ForbiddenException("No puedes eliminar esta inscripcion.");
             }
 
             await _unitOfWork.InscripcionRepo.DeleteAsync(inscripcionId);
@@ -158,7 +134,7 @@ namespace RegistroEstudiantil.Application.Services
 
             if (!inscripciones.Any())
             {
-                throw new ApiException(StatusCodes.Status404NotFound, "No se encontraron inscripciones para este estudiante.");
+                throw new NotFoundException("No se encontraron inscripciones para este estudiante.");
             }
 
             var grupoIds = inscripciones.Select(i => i.GrupoClaseId).Distinct().ToList();
@@ -173,21 +149,18 @@ namespace RegistroEstudiantil.Application.Services
         {
             if (!_currentUserService.UserId.HasValue)
             {
-                throw new ApiException(StatusCodes.Status401Unauthorized, "Usuario no autenticado.");
+                throw new UnauthorizedException("Usuario no autenticado.");
             }
 
-            var estudiante = (await _unitOfWork.Repository<Estudiante>().ListAsync(e => e.UsuarioId == _currentUserService.UserId.Value))
-                .FirstOrDefault();
+            var estudiante = (await _unitOfWork.Repository<Estudiante>().ListAsync(
+                e => e.UsuarioId == _currentUserService.UserId.Value)).FirstOrDefault();
 
             if (estudiante is null)
             {
-                throw new ApiException(StatusCodes.Status400BadRequest, "Primero debes crear tu perfil de estudiante.");
+                throw new ValidationException("Primero debes crear tu perfil de estudiante.");
             }
 
             return estudiante;
         }
     }
 }
-
-
-

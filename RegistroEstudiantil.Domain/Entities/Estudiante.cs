@@ -13,6 +13,19 @@
         public Usuario Usuario { get; set; } = null!;
 
         public ICollection<Inscripcion> Inscripciones { get; set; } = new List<Inscripcion>();
+
+        public static Estudiante Crear(string documento, string nombres, string apellidos, Usuario usuario)
+        {
+            return new Estudiante
+            {
+                Documento = documento,
+                Nombres = nombres,
+                Apellidos = apellidos,
+                Usuario = usuario
+            };
+        }
+
+        public bool PerteneceAUsuario(int usuarioId) => UsuarioId == usuarioId;
     }
 }
 

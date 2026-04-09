@@ -1,4 +1,3 @@
-﻿using RegistroEstudiantil.Application.DTOs.Auth;
 using RegistroEstudiantil.Application.DTOs.Auth;
 
 namespace RegistroEstudiantil.Application.Services.Interfaces
@@ -10,5 +9,3 @@ namespace RegistroEstudiantil.Application.Services.Interfaces
         CurrentUserDto GetCurrentUser();
     }
 }
-
-

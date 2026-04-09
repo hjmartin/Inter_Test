@@ -1,4 +1,3 @@
-﻿using RegistroEstudiantil.Application.DTOs;
 using RegistroEstudiantil.Application.DTOs;
 
 namespace RegistroEstudiantil.Application.Services.Interfaces
@@ -16,5 +15,3 @@ namespace RegistroEstudiantil.Application.Services.Interfaces
         Task<IReadOnlyList<string>> ObtenerInscripcionesYCompanierosAsync();
     }
 }
-
-

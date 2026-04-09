@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RegistroEstudiantil.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using RegistroEstudiantil.Application.Common.Exceptions;
 using RegistroEstudiantil.Application.Interfaces.Persistence;
+using RegistroEstudiantil.Infrastructure.Data;
 using System.Data;
 
 namespace RegistroEstudiantil.Infrastructure.Repository
@@ -40,7 +41,14 @@ namespace RegistroEstudiantil.Infrastructure.Repository
 
         public async Task SaveAsync()
         {
-            await _db.SaveChangesAsync();
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new ConflictException("No se pudo completar la operación por un conflicto de persistencia.", ex.Message);
+            }
         }
 
         public async Task ExecuteInTransactionAsync(Func<Task> action, IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
@@ -56,6 +64,11 @@ namespace RegistroEstudiantil.Infrastructure.Repository
                     await action();
                     await transaction.CommitAsync();
                 }
+                catch (DbUpdateException ex)
+                {
+                    await transaction.RollbackAsync();
+                    throw new ConflictException("No se pudo completar la operación por un conflicto de persistencia.", ex.Message);
+                }
                 catch
                 {
                     await transaction.RollbackAsync();
@@ -65,5 +78,3 @@ namespace RegistroEstudiantil.Infrastructure.Repository
         }
     }
 }
-
-

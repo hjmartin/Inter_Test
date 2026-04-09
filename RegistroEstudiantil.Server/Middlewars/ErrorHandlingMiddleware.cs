@@ -1,5 +1,6 @@
-﻿
+using Microsoft.AspNetCore.Http;
 using RegistroEstudiantil.Application.Common.Exceptions;
+using RegistroEstudiantil.Domain.Exceptions;
 
 namespace RegistroEstudiantil.Server.Middlewars
 {
@@ -20,10 +21,10 @@ namespace RegistroEstudiantil.Server.Middlewars
             {
                 await _next(context);
             }
-            catch (ApiException ex)
+            catch (AppException ex)
             {
                 _logger.LogWarning(ex, ex.Message);
-                context.Response.StatusCode = ex.StatusCode;
+                context.Response.StatusCode = MapStatusCode(ex);
 
                 if (ex.Payload is not null)
                 {
@@ -37,10 +38,20 @@ namespace RegistroEstudiantil.Server.Middlewars
                     message = ex.Message
                 });
             }
+            catch (DomainRuleException ex)
+            {
+                _logger.LogWarning(ex, ex.Message);
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    mensaje = ex.Message,
+                    message = ex.Message
+                });
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "OcurriÃ³ un error inesperado");
-                context.Response.StatusCode = 500;
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 await context.Response.WriteAsJsonAsync(new
                 {
                     mensaje = "OcurriÃ³ un error inesperado.",
@@ -48,6 +59,15 @@ namespace RegistroEstudiantil.Server.Middlewars
                 });
             }
         }
+
+        private static int MapStatusCode(AppException ex) => ex switch
+        {
+            ValidationException => StatusCodes.Status400BadRequest,
+            UnauthorizedException => StatusCodes.Status401Unauthorized,
+            ForbiddenException => StatusCodes.Status403Forbidden,
+            NotFoundException => StatusCodes.Status404NotFound,
+            ConflictException => StatusCodes.Status409Conflict,
+            _ => StatusCodes.Status500InternalServerError
+        };
     }
 }
-

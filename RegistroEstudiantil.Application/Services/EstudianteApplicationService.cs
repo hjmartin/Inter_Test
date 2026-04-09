@@ -1,16 +1,12 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 using RegistroEstudiantil.Application.Common.Exceptions;
 using RegistroEstudiantil.Application.Common.Models;
 using RegistroEstudiantil.Application.Common.Security;
-using RegistroEstudiantil.Application.Services.Interfaces;
 using RegistroEstudiantil.Application.DTOs;
 using RegistroEstudiantil.Application.DTOs.Shared;
-using RegistroEstudiantil.Domain.Entities;
 using RegistroEstudiantil.Application.Interfaces.Persistence;
-using RegistroEstudiantil.Application.Utilidades;
+using RegistroEstudiantil.Application.Services.Interfaces;
+using RegistroEstudiantil.Domain.Entities;
 
 namespace RegistroEstudiantil.Application.Services
 {
@@ -40,31 +36,25 @@ namespace RegistroEstudiantil.Application.Services
                 return new PagedResult<EstudianteDTO>();
             }
 
-            var queryable = _unitOfWork.Repository<Estudiante>()
-                .GetAll()
-                .Where(x => x.Id == estudiante.Id)
-                .OrderBy(x => x.Nombres);
-
-            var totalCount = await queryable.CountAsync();
-            var items = await queryable
-                .Paginar(paginacionDTO)
-                .ProjectTo<EstudianteDTO>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+            var estudiantes = await _unitOfWork.Repository<Estudiante>().ListAsync(x => x.Id == estudiante.Id);
+            var ordenados = estudiantes.OrderBy(x => x.Nombres).ToList();
+            var items = ordenados
+                .Skip((paginacionDTO.Pagina - 1) * paginacionDTO.RecordsPorPagina)
+                .Take(paginacionDTO.RecordsPorPagina)
+                .ToList();
 
             return new PagedResult<EstudianteDTO>
             {
-                Items = items,
-                TotalCount = totalCount
+                Items = _mapper.Map<List<EstudianteDTO>>(items),
+                TotalCount = ordenados.Count
             };
         }
 
         public async Task<IReadOnlyList<EstudianteDTO>> GetAllAsync()
         {
-            return await _unitOfWork.Repository<Estudiante>()
-                .GetAll()
-                .OrderBy(x => x.Nombres)
-                .ProjectTo<EstudianteDTO>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+            var estudiantes = await _unitOfWork.Repository<Estudiante>().ListAsync();
+            var ordenados = estudiantes.OrderBy(x => x.Nombres).ToList();
+            return _mapper.Map<List<EstudianteDTO>>(ordenados);
         }
 
         public async Task<EstudianteDTO> CreateAsync(EstudianteCreacionDTO dto)
@@ -72,7 +62,7 @@ namespace RegistroEstudiantil.Application.Services
             var userId = GetRequiredUserId();
             if (await _unitOfWork.Repository<Estudiante>().AnyAsync(e => e.UsuarioId == userId))
             {
-                throw new ApiException(StatusCodes.Status409Conflict, "El usuario ya tiene perfil de estudiante.");
+                throw new ConflictException("El usuario ya tiene perfil de estudiante.");
             }
 
             var estudiante = _mapper.Map<Estudiante>(dto);
@@ -90,12 +80,12 @@ namespace RegistroEstudiantil.Application.Services
             var estudiante = await _unitOfWork.Repository<Estudiante>().GetByIdAsync(id);
             if (estudiante is null)
             {
-                throw new ApiException(StatusCodes.Status404NotFound, "Estudiante no encontrado.");
+                throw new NotFoundException("Estudiante no encontrado.");
             }
 
-            if (estudiante.UsuarioId != userId)
+            if (!estudiante.PerteneceAUsuario(userId))
             {
-                throw new ApiException(StatusCodes.Status403Forbidden, "No puedes modificar este perfil.");
+                throw new ForbiddenException("No puedes modificar este perfil.");
             }
 
             _mapper.Map(dto, estudiante);
@@ -108,7 +98,7 @@ namespace RegistroEstudiantil.Application.Services
             var estudiante = await _unitOfWork.Repository<Estudiante>().GetByIdAsync(id);
             if (estudiante is null)
             {
-                throw new ApiException(StatusCodes.Status404NotFound, "Estudiante no encontrado.");
+                throw new NotFoundException("Estudiante no encontrado.");
             }
 
             return _mapper.Map<EstudianteDTO>(estudiante);
@@ -120,18 +110,18 @@ namespace RegistroEstudiantil.Application.Services
             var estudiante = await _unitOfWork.Repository<Estudiante>().GetByIdAsync(id);
             if (estudiante is null)
             {
-                throw new ApiException(StatusCodes.Status404NotFound, "Estudiante no encontrado.");
+                throw new NotFoundException("Estudiante no encontrado.");
             }
 
-            if (estudiante.UsuarioId != userId)
+            if (!estudiante.PerteneceAUsuario(userId))
             {
-                throw new ApiException(StatusCodes.Status403Forbidden, "No puedes eliminar este perfil.");
+                throw new ForbiddenException("No puedes eliminar este perfil.");
             }
 
             var tieneInscripciones = await _unitOfWork.InscripcionRepo.AnyAsync(i => i.EstudianteId == id);
             if (tieneInscripciones)
             {
-                throw new ApiException(StatusCodes.Status409Conflict, "No puedes eliminar tu perfil porque tienes inscripciones activas.");
+                throw new ConflictException("No puedes eliminar tu perfil porque tienes inscripciones activas.");
             }
 
             _unitOfWork.Repository<Estudiante>().Remove(estudiante);
@@ -142,12 +132,10 @@ namespace RegistroEstudiantil.Application.Services
         {
             if (!_currentUserService.UserId.HasValue)
             {
-                throw new ApiException(StatusCodes.Status401Unauthorized, "Usuario no autenticado.");
+                throw new UnauthorizedException("Usuario no autenticado.");
             }
 
             return _currentUserService.UserId.Value;
         }
     }
 }
-
-
