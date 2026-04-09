@@ -1,6 +1,6 @@
 # RegistroEstudiantil
 
-Aplicacion web para registro e inscripcion de estudiantes, desarrollada como prueba tecnica. El sistema permite registrar usuarios, crear su perfil de estudiante, gestionar inscripciones por periodo y consultar informacion relacionada con companeros y otros estudiantes.
+Aplicacion web para registro e inscripcion de estudiantes, El sistema permite registrar usuarios, crear su perfil de estudiante, gestionar inscripciones por periodo y consultar informacion relacionada con companeros y otros estudiantes.
 
 ## Stack Tecnologico
 
@@ -119,24 +119,6 @@ npm start
 
 Cuando el backend este en ejecucion, Swagger queda disponible en la URL que exponga la API, normalmente bajo `/swagger`.
 
-## Comandos Utiles
-
-Crear una migracion:
-
-```powershell
-dotnet ef migrations add NombreMigracion --project RegistroEstudiantil.Infrastructure --startup-project RegistroEstudiantil.Server --output-dir Migrations
-```
-
-Actualizar base de datos:
-
-```powershell
-dotnet ef database update --project RegistroEstudiantil.Infrastructure --startup-project RegistroEstudiantil.Server
-```
-
-Validar TypeScript del cliente:
-
-```powershell
-npx tsc -p tsconfig.app.json --noEmit
 ```
 
 ## Estado Actual
@@ -147,8 +129,5 @@ El proyecto ya incluye:
 - validaciones de negocio en inscripciones
 - mejoras de UI/UX en pantallas principales
 
-## Documentacion
-
-La documentacion tecnica detallada puede ir en un archivo separado, por ejemplo:
 
 
