@@ -11,8 +11,8 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddApplication();
+builder.Services.AgregarInfraestructura(builder.Configuration);
+builder.Services.AgregarAplicacion();
 
 var originesPermitidos = builder.Configuration.GetValue<string>("origenesPermitidos")!
     .Split(",");

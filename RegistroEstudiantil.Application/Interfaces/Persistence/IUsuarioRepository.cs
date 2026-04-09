@@ -1,12 +1,11 @@
-﻿using RegistroEstudiantil.Domain.Entities;
+using RegistroEstudiantil.Domain.Entities;
 
 namespace RegistroEstudiantil.Application.Interfaces.Persistence
 {
-    public interface IUsuarioRepository : IRepository<Usuario>
+    public interface IUsuarioRepository
     {
-        Task<Usuario?> GetByEmailAsync(string email);
-        Task<bool> ExistsEmailAsync(string email, int? excludeId = null);
+        Task<Usuario?> ObtenerPorCorreoAsync(string email);
+        Task<bool> ExisteCorreoAsync(string email, int? excludeId = null);
+        void Agregar(Usuario usuario);
     }
 }
-
-

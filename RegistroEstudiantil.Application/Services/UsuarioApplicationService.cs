@@ -28,7 +28,7 @@ namespace RegistroEstudiantil.Application.Services
             _passwordHasher = passwordHasher;
         }
 
-        public async Task<LoginResponseDTO> RegisterAsync(RegisterDto dto)
+        public async Task<LoginResponseDTO> RegistrarAsync(RegisterDto dto)
         {
             Usuario? usuario = null;
             var email = dto.Email.Trim().ToLowerInvariant();
@@ -36,45 +36,45 @@ namespace RegistroEstudiantil.Application.Services
             var nombres = dto.Nombres.Trim();
             var apellidos = dto.Apellidos.Trim();
 
-            await _unitOfWork.ExecuteInTransactionAsync(async () =>
+            await _unitOfWork.EjecutarEnTransaccionAsync(async () =>
             {
-                if (await _unitOfWork.UsuarioRepo.ExistsEmailAsync(email))
+                if (await _unitOfWork.UsuarioRepo.ExisteCorreoAsync(email))
                 {
                     throw new ConflictException("Email ya registrado.");
                 }
 
-                if (await _unitOfWork.Repository<Estudiante>().AnyAsync(e => e.Documento == documento))
+                if (await _unitOfWork.EstudianteRepo.ExistePorDocumentoAsync(documento))
                 {
                     throw new ConflictException("El documento ya esta registrado.");
                 }
 
-                usuario = Usuario.CrearEstudiante(email, _passwordHasher.Hash(dto.Pass));
+                usuario = Usuario.CrearEstudiante(email, _passwordHasher.GenerarHash(dto.Pass));
                 var estudiante = Estudiante.Crear(documento, nombres, apellidos, usuario);
 
-                _unitOfWork.UsuarioRepo.Add(usuario);
-                _unitOfWork.Repository<Estudiante>().Add(estudiante);
-                await _unitOfWork.SaveAsync();
+                _unitOfWork.UsuarioRepo.Agregar(usuario);
+                _unitOfWork.EstudianteRepo.Agregar(estudiante);
+                await _unitOfWork.GuardarCambiosAsync();
             }, IsolationLevel.ReadCommitted);
 
-            return _jwtTokenService.CreateToken(usuario!);
+            return _jwtTokenService.CrearToken(usuario!);
         }
 
-        public async Task<LoginResponseDTO> LoginAsync(LoginRequestDTO dto)
+        public async Task<LoginResponseDTO> IniciarSesionAsync(LoginRequestDTO dto)
         {
             var email = dto.Email.Trim().ToLowerInvariant();
-            var usuario = await _unitOfWork.UsuarioRepo.GetByEmailAsync(email);
+            var usuario = await _unitOfWork.UsuarioRepo.ObtenerPorCorreoAsync(email);
 
-            if (usuario is null || !_passwordHasher.Verify(dto.Pass, usuario.PasswordHash))
+            if (usuario is null || !_passwordHasher.Verificar(dto.Pass, usuario.PasswordHash))
             {
                 throw new ValidationException(
                     "Credenciales incorrectas.",
                     new { errores = new[] { "Credenciales incorrectas" } });
             }
 
-            return _jwtTokenService.CreateToken(usuario);
+            return _jwtTokenService.CrearToken(usuario);
         }
 
-        public CurrentUserDto GetCurrentUser()
+        public CurrentUserDto ObtenerUsuarioActual()
         {
             if (!_currentUserService.UserId.HasValue)
             {

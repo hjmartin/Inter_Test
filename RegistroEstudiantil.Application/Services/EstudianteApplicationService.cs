@@ -26,41 +26,39 @@ namespace RegistroEstudiantil.Application.Services
             _currentUserService = currentUserService;
         }
 
-        public async Task<PagedResult<EstudianteDTO>> GetCurrentAsync(PaginacionDTO paginacionDTO)
+        public async Task<PagedResult<EstudianteDTO>> ObtenerActualAsync(PaginacionDTO paginacionDTO)
         {
-            var userId = GetRequiredUserId();
-            var estudiante = (await _unitOfWork.Repository<Estudiante>().ListAsync(e => e.UsuarioId == userId)).FirstOrDefault();
+            var userId = ObtenerIdUsuarioRequerido();
+            var estudiante = await _unitOfWork.EstudianteRepo.ObtenerPorUsuarioIdAsync(userId);
 
             if (estudiante is null)
             {
                 return new PagedResult<EstudianteDTO>();
             }
 
-            var estudiantes = await _unitOfWork.Repository<Estudiante>().ListAsync(x => x.Id == estudiante.Id);
-            var ordenados = estudiantes.OrderBy(x => x.Nombres).ToList();
-            var items = ordenados
-                .Skip((paginacionDTO.Pagina - 1) * paginacionDTO.RecordsPorPagina)
-                .Take(paginacionDTO.RecordsPorPagina)
-                .ToList();
+            var items = await _unitOfWork.EstudianteRepo.ObtenerPaginaPorUsuarioAsync(
+                userId,
+                paginacionDTO.Pagina,
+                paginacionDTO.RecordsPorPagina);
+            var totalCount = await _unitOfWork.EstudianteRepo.ContarPorUsuarioAsync(userId);
 
             return new PagedResult<EstudianteDTO>
             {
                 Items = _mapper.Map<List<EstudianteDTO>>(items),
-                TotalCount = ordenados.Count
+                TotalCount = totalCount
             };
         }
 
-        public async Task<IReadOnlyList<EstudianteDTO>> GetAllAsync()
+        public async Task<IReadOnlyList<EstudianteDTO>> ObtenerTodosAsync()
         {
-            var estudiantes = await _unitOfWork.Repository<Estudiante>().ListAsync();
-            var ordenados = estudiantes.OrderBy(x => x.Nombres).ToList();
-            return _mapper.Map<List<EstudianteDTO>>(ordenados);
+            var estudiantes = await _unitOfWork.EstudianteRepo.ObtenerTodosOrdenadosAsync();
+            return _mapper.Map<List<EstudianteDTO>>(estudiantes);
         }
 
-        public async Task<EstudianteDTO> CreateAsync(EstudianteCreacionDTO dto)
+        public async Task<EstudianteDTO> CrearAsync(EstudianteCreacionDTO dto)
         {
-            var userId = GetRequiredUserId();
-            if (await _unitOfWork.Repository<Estudiante>().AnyAsync(e => e.UsuarioId == userId))
+            var userId = ObtenerIdUsuarioRequerido();
+            if (await _unitOfWork.EstudianteRepo.ExistePorUsuarioIdAsync(userId))
             {
                 throw new ConflictException("El usuario ya tiene perfil de estudiante.");
             }
@@ -68,16 +66,16 @@ namespace RegistroEstudiantil.Application.Services
             var estudiante = _mapper.Map<Estudiante>(dto);
             estudiante.UsuarioId = userId;
 
-            _unitOfWork.Repository<Estudiante>().Add(estudiante);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.EstudianteRepo.Agregar(estudiante);
+            await _unitOfWork.GuardarCambiosAsync();
 
             return _mapper.Map<EstudianteDTO>(estudiante);
         }
 
-        public async Task UpdateAsync(int id, EstudianteUpdateDTO dto)
+        public async Task ActualizarAsync(int id, EstudianteUpdateDTO dto)
         {
-            var userId = GetRequiredUserId();
-            var estudiante = await _unitOfWork.Repository<Estudiante>().GetByIdAsync(id);
+            var userId = ObtenerIdUsuarioRequerido();
+            var estudiante = await _unitOfWork.EstudianteRepo.ObtenerPorIdAsync(id);
             if (estudiante is null)
             {
                 throw new NotFoundException("Estudiante no encontrado.");
@@ -89,13 +87,13 @@ namespace RegistroEstudiantil.Application.Services
             }
 
             _mapper.Map(dto, estudiante);
-            _unitOfWork.Repository<Estudiante>().UpdateAsync(estudiante);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.EstudianteRepo.Actualizar(estudiante);
+            await _unitOfWork.GuardarCambiosAsync();
         }
 
-        public async Task<EstudianteDTO> GetByIdAsync(int id)
+        public async Task<EstudianteDTO> ObtenerPorIdAsync(int id)
         {
-            var estudiante = await _unitOfWork.Repository<Estudiante>().GetByIdAsync(id);
+            var estudiante = await _unitOfWork.EstudianteRepo.ObtenerPorIdAsync(id);
             if (estudiante is null)
             {
                 throw new NotFoundException("Estudiante no encontrado.");
@@ -104,10 +102,10 @@ namespace RegistroEstudiantil.Application.Services
             return _mapper.Map<EstudianteDTO>(estudiante);
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task EliminarAsync(int id)
         {
-            var userId = GetRequiredUserId();
-            var estudiante = await _unitOfWork.Repository<Estudiante>().GetByIdAsync(id);
+            var userId = ObtenerIdUsuarioRequerido();
+            var estudiante = await _unitOfWork.EstudianteRepo.ObtenerPorIdAsync(id);
             if (estudiante is null)
             {
                 throw new NotFoundException("Estudiante no encontrado.");
@@ -118,17 +116,17 @@ namespace RegistroEstudiantil.Application.Services
                 throw new ForbiddenException("No puedes eliminar este perfil.");
             }
 
-            var tieneInscripciones = await _unitOfWork.InscripcionRepo.AnyAsync(i => i.EstudianteId == id);
+            var tieneInscripciones = await _unitOfWork.InscripcionRepo.ExisteAlgunaPorEstudianteAsync(id);
             if (tieneInscripciones)
             {
                 throw new ConflictException("No puedes eliminar tu perfil porque tienes inscripciones activas.");
             }
 
-            _unitOfWork.Repository<Estudiante>().Remove(estudiante);
-            await _unitOfWork.SaveAsync();
+            _unitOfWork.EstudianteRepo.Eliminar(estudiante);
+            await _unitOfWork.GuardarCambiosAsync();
         }
 
-        private int GetRequiredUserId()
+        private int ObtenerIdUsuarioRequerido()
         {
             if (!_currentUserService.UserId.HasValue)
             {

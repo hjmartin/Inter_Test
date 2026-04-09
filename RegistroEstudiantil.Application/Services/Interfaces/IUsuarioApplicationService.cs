@@ -4,8 +4,8 @@ namespace RegistroEstudiantil.Application.Services.Interfaces
 {
     public interface IUsuarioApplicationService
     {
-        Task<LoginResponseDTO> RegisterAsync(RegisterDto dto);
-        Task<LoginResponseDTO> LoginAsync(LoginRequestDTO dto);
-        CurrentUserDto GetCurrentUser();
+        Task<LoginResponseDTO> RegistrarAsync(RegisterDto dto);
+        Task<LoginResponseDTO> IniciarSesionAsync(LoginRequestDTO dto);
+        CurrentUserDto ObtenerUsuarioActual();
     }
 }

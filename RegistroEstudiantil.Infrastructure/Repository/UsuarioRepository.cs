@@ -1,20 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RegistroEstudiantil.Infrastructure.Data;
-using RegistroEstudiantil.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using RegistroEstudiantil.Application.Interfaces.Persistence;
+using RegistroEstudiantil.Domain.Entities;
+using RegistroEstudiantil.Infrastructure.Data;
 
 namespace RegistroEstudiantil.Infrastructure.Repository
 {
-    public class UsuarioRepository : Repository<Usuario>, IUsuarioRepository
+    public class UsuarioRepository : IUsuarioRepository
     {
-        public UsuarioRepository(ApplicationDbContext db) : base(db) { }
+        private readonly ApplicationDbContext _db;
 
-        public Task<Usuario?> GetByEmailAsync(string email) =>
+        public UsuarioRepository(ApplicationDbContext db)
+        {
+            _db = db;
+        }
+
+        public Task<Usuario?> ObtenerPorCorreoAsync(string email) =>
             _db.Usuarios.AsNoTracking().FirstOrDefaultAsync(x => x.Email == email);
 
-        public Task<bool> ExistsEmailAsync(string email, int? excludeId = null) =>
+        public Task<bool> ExisteCorreoAsync(string email, int? excludeId = null) =>
             _db.Usuarios.AnyAsync(x => x.Email == email && (excludeId == null || x.Id != excludeId));
+
+        public void Agregar(Usuario usuario) => _db.Usuarios.Add(usuario);
     }
 }
-
-

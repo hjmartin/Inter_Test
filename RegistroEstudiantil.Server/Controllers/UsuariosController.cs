@@ -21,7 +21,7 @@ namespace RegistroEstudiantil.Server.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
-            var respuesta = await _usuarioApplicationService.RegisterAsync(dto);
+            var respuesta = await _usuarioApplicationService.RegistrarAsync(dto);
             return Ok(respuesta);
         }
 
@@ -29,7 +29,7 @@ namespace RegistroEstudiantil.Server.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO dto)
         {
-            var respuesta = await _usuarioApplicationService.LoginAsync(dto);
+            var respuesta = await _usuarioApplicationService.IniciarSesionAsync(dto);
             return Ok(respuesta);
         }
 
@@ -37,7 +37,7 @@ namespace RegistroEstudiantil.Server.Controllers
         [HttpGet("me")]
         public IActionResult Me()
         {
-            return Ok(_usuarioApplicationService.GetCurrentUser());
+            return Ok(_usuarioApplicationService.ObtenerUsuarioActual());
         }
     }
 }

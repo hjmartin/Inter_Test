@@ -24,7 +24,7 @@ namespace RegistroEstudiantil.Server.Middlewars
             catch (AppException ex)
             {
                 _logger.LogWarning(ex, ex.Message);
-                context.Response.StatusCode = MapStatusCode(ex);
+                context.Response.StatusCode = MapearCodigoEstado(ex);
 
                 if (ex.Payload is not null)
                 {
@@ -50,17 +50,17 @@ namespace RegistroEstudiantil.Server.Middlewars
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "OcurriÃ³ un error inesperado");
+                _logger.LogError(ex, "Ocurrio un error inesperado");
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 await context.Response.WriteAsJsonAsync(new
                 {
-                    mensaje = "OcurriÃ³ un error inesperado.",
-                    message = "OcurriÃ³ un error inesperado."
+                    mensaje = "Ocurrio un error inesperado.",
+                    message = "Ocurrio un error inesperado."
                 });
             }
         }
 
-        private static int MapStatusCode(AppException ex) => ex switch
+        private static int MapearCodigoEstado(AppException ex) => ex switch
         {
             ValidationException => StatusCodes.Status400BadRequest,
             UnauthorizedException => StatusCodes.Status401Unauthorized,

@@ -24,7 +24,7 @@ namespace RegistroEstudiantil.Server.Controllers
             if (!ModelState.IsValid) return ValidationProblem(ModelState);
 
             await _inscripcionApplicationService.CrearAsync(dto);
-            return Ok(new { mensaje = "InscripciÃ³n realizada." });
+            return Ok(new { mensaje = "Inscripción realizada." });
         }
 
         [HttpGet("{grupoId:int}/companeros")]
@@ -39,35 +39,35 @@ namespace RegistroEstudiantil.Server.Controllers
             return Ok(await _inscripcionApplicationService.VerRegistrosDeOtroAsync(estudianteId, periodo));
         }
 
-        [HttpGet("mias/{periodo}/creditos")]
-        public async Task<IActionResult> MisCreditos(string periodo)
-        {
-            return Ok(await _inscripcionApplicationService.MisCreditosAsync(periodo));
-        }
+        //[HttpGet("mias/{periodo}/creditos")]
+        //public async Task<IActionResult> MisCreditos(string periodo)
+        //{
+        //    return Ok(await _inscripcionApplicationService.ObtenerMisCreditosAsync(periodo));
+        //}
 
         [HttpDelete("{inscripcionId:int}")]
         public async Task<IActionResult> Delete(int inscripcionId)
         {
-            await _inscripcionApplicationService.DeleteAsync(inscripcionId);
+            await _inscripcionApplicationService.EliminarAsync(inscripcionId);
             return NoContent();
         }
 
         [HttpGet("info")]
         public async Task<ActionResult<IEnumerable<GrupoInfoDto>>> GetGruposInfo()
         {
-            return Ok(await _inscripcionApplicationService.GetGruposInfoAsync());
+            return Ok(await _inscripcionApplicationService.ObtenerInfoGruposAsync());
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<InscripcionInfoDto>>> GetByEstudiante()
         {
-            return Ok(await _inscripcionApplicationService.GetByEstudianteAsync());
+            return Ok(await _inscripcionApplicationService.ObtenerPorEstudianteAsync());
         }
 
         [HttpGet("estudiante/{estudianteId:int}")]
         public async Task<ActionResult<IEnumerable<InscripcionInfoDto>>> GetByOtroEstudiante(int estudianteId)
         {
-            return Ok(await _inscripcionApplicationService.GetByOtroEstudianteAsync(estudianteId));
+            return Ok(await _inscripcionApplicationService.ObtenerPorOtroEstudianteAsync(estudianteId));
         }
 
         [HttpGet("inscripciones-y-companieros")]

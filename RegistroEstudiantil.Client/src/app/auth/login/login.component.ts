@@ -9,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
-import { extraerErrores, extraerErroresIdentity } from '../../compartidos/funciones/extraerErrores';
+import { extraerErroresIdentity } from '../../compartidos/funciones/extraerErrores';
 import { LoginRequestDTO } from '../../dtos/auth/authDTO';
 import { MostrarErroresComponent } from '../../compartidos/mostrar-errores/mostrar-errores.component';
 
@@ -48,6 +48,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    this.errores = [];
     const credenciales = this.formLogin.value as LoginRequestDTO;
 
     this.seguridadService.login(credenciales).subscribe({
@@ -55,8 +56,22 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/inventario/dashboard']);
       },
       error: err => {
-        const errores = extraerErroresIdentity(err);
-        this.errores = errores;
+        if (Array.isArray(err?.error)) {
+          this.errores = extraerErroresIdentity(err);
+          return;
+        }
+
+        if (Array.isArray(err?.error?.errores)) {
+          this.errores = err.error.errores;
+          return;
+        }
+
+        if (err?.error?.mensaje) {
+          this.errores = [err.error.mensaje];
+          return;
+        }
+
+        this.errores = ['Ocurrio un error inesperado.'];
       }
     });
   }

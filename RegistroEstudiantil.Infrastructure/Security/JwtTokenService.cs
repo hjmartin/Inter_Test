@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RegistroEstudiantil.Application.DTOs.Auth;
-using RegistroEstudiantil.Domain.Entities;
 using RegistroEstudiantil.Application.Interfaces.Security;
+using RegistroEstudiantil.Domain.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -18,7 +18,7 @@ namespace RegistroEstudiantil.Infrastructure.Security
             _cfg = configuration;
         }
 
-        public LoginResponseDTO CreateToken(Usuario u)
+        public LoginResponseDTO CrearToken(Usuario u)
         {
             var issuer = _cfg["JwtIssuer"]!;
             var audience = _cfg["JwtAudience"]!;
@@ -58,5 +58,3 @@ namespace RegistroEstudiantil.Infrastructure.Security
         }
     }
 }
-
-

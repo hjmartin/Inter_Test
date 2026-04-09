@@ -30,7 +30,7 @@ namespace RegistroEstudiantil.Server.Controllers
         [OutputCache(Tags = [CacheTag])]
         public async Task<List<EstudianteDTO>> Get([FromQuery] PaginacionDTO paginacionDTO)
         {
-            var result = await _estudianteApplicationService.GetCurrentAsync(paginacionDTO);
+            var result = await _estudianteApplicationService.ObtenerActualAsync(paginacionDTO);
             HttpContext.Response.Headers.Append("cantidad-total-registros", result.TotalCount.ToString());
             return result.Items.ToList();
         }
@@ -39,14 +39,14 @@ namespace RegistroEstudiantil.Server.Controllers
         [OutputCache(Tags = [CacheTag])]
         public async Task<List<EstudianteDTO>> GetTodos()
         {
-            return (await _estudianteApplicationService.GetAllAsync()).ToList();
+            return (await _estudianteApplicationService.ObtenerTodosAsync()).ToList();
         }
 
         [HttpPost]
         [OutputCache(Tags = [CacheTag])]
         public async Task<IActionResult> Crear([FromBody] EstudianteCreacionDTO dto)
         {
-            var estudiante = await _estudianteApplicationService.CreateAsync(dto);
+            var estudiante = await _estudianteApplicationService.CrearAsync(dto);
             await _outputCacheStore.EvictByTagAsync(CacheTag, default);
             return CreatedAtAction(nameof(GetById), new { id = estudiante.Id }, estudiante);
         }
@@ -55,7 +55,7 @@ namespace RegistroEstudiantil.Server.Controllers
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Put(int id, [FromBody] EstudianteUpdateDTO dto)
         {
-            await _estudianteApplicationService.UpdateAsync(id, dto);
+            await _estudianteApplicationService.ActualizarAsync(id, dto);
             await _outputCacheStore.EvictByTagAsync(CacheTag, default);
             return NoContent();
         }
@@ -64,13 +64,13 @@ namespace RegistroEstudiantil.Server.Controllers
         [HttpGet("{id:int}", Name = "GetById")]
         public async Task<IActionResult> GetById(int id)
         {
-            return Ok(await _estudianteApplicationService.GetByIdAsync(id));
+            return Ok(await _estudianteApplicationService.ObtenerPorIdAsync(id));
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _estudianteApplicationService.DeleteAsync(id);
+            await _estudianteApplicationService.EliminarAsync(id);
             await _outputCacheStore.EvictByTagAsync(CacheTag, default);
             return NoContent();
         }

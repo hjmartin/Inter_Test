@@ -7,7 +7,7 @@ namespace RegistroEstudiantil.Application
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services)
+        public static IServiceCollection AgregarAplicacion(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(AutoMapperProfiles));
             services.AddScoped<IUsuarioApplicationService, UsuarioApplicationService>();

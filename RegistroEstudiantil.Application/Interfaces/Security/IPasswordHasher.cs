@@ -2,7 +2,7 @@ namespace RegistroEstudiantil.Application.Interfaces.Security
 {
     public interface IPasswordHasher
     {
-        string Hash(string value);
-        bool Verify(string value, string hash);
+        string GenerarHash(string value);
+        bool Verificar(string value, string hash);
     }
 }

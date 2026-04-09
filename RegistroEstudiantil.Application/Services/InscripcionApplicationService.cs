@@ -24,46 +24,46 @@ namespace RegistroEstudiantil.Application.Services
 
         public async Task CrearAsync(InscripcionCreateDto dto)
         {
-            await _unitOfWork.ExecuteInTransactionAsync(async () =>
+            await _unitOfWork.EjecutarEnTransaccionAsync(async () =>
             {
-                var estudiante = await GetRequiredEstudianteAsync();
+                var estudiante = await ObtenerEstudianteRequeridoAsync();
                 var periodo = dto.Periodo.Trim().ToUpperInvariant();
-                var grupo = await _unitOfWork.Repository<GrupoClase>().GetByIdAsync(dto.GrupoClaseId);
+                var grupo = await _unitOfWork.GrupoClaseRepo.ObtenerPorIdAsync(dto.GrupoClaseId);
 
                 if (grupo is null)
                 {
                     throw new NotFoundException("Grupo no encontrado.");
                 }
 
-                var count = await _unitOfWork.InscripcionRepo.CountByEstudiantePeriodoAsync(estudiante.Id, periodo);
+                var count = await _unitOfWork.InscripcionRepo.ContarPorEstudiantePeriodoAsync(estudiante.Id, periodo);
                 var yaTieneConEseProfesor =
-                    await _unitOfWork.InscripcionRepo.ExistsProfesorEnPeriodoAsync(estudiante.Id, grupo.ProfesorId, periodo);
+                    await _unitOfWork.InscripcionRepo.ExisteProfesorEnPeriodoAsync(estudiante.Id, grupo.ProfesorId, periodo);
                 var yaInscritoMismaMateria =
-                    await _unitOfWork.InscripcionRepo.ExistsMateriaEnPeriodoAsync(estudiante.Id, grupo.MateriaId, periodo);
+                    await _unitOfWork.InscripcionRepo.ExisteMateriaEnPeriodoAsync(estudiante.Id, grupo.MateriaId, periodo);
 
                 InscripcionRules.ValidarNuevaInscripcion(count, yaTieneConEseProfesor, yaInscritoMismaMateria);
 
-                _unitOfWork.InscripcionRepo.Add(new Inscripcion
+                _unitOfWork.InscripcionRepo.Agregar(new Inscripcion
                 {
                     EstudianteId = estudiante.Id,
                     GrupoClaseId = dto.GrupoClaseId,
                     Periodo = periodo
                 });
 
-                await _unitOfWork.SaveAsync();
+                await _unitOfWork.GuardarCambiosAsync();
             }, IsolationLevel.Serializable);
         }
 
         public async Task<IReadOnlyList<string>> VerCompanerosAsync(int grupoId)
         {
-            var estudiante = await GetRequiredEstudianteAsync();
-            return await _unitOfWork.InscripcionRepo.GetNombresCompanerosAsync(grupoId, estudiante.Id);
+            var estudiante = await ObtenerEstudianteRequeridoAsync();
+            return await _unitOfWork.InscripcionRepo.ObtenerNombresCompanerosAsync(grupoId, estudiante.Id);
         }
 
         public async Task<IReadOnlyList<InscripcionPublicaDto>> VerRegistrosDeOtroAsync(int estudianteId, string periodo)
         {
             var periodoNormalizado = periodo.Trim().ToUpperInvariant();
-            var suyas = await _unitOfWork.InscripcionRepo.GetByEstudiantePeriodoAsync(estudianteId, periodoNormalizado);
+            var suyas = await _unitOfWork.InscripcionRepo.ObtenerPorEstudiantePeriodoAsync(estudianteId, periodoNormalizado);
 
             return suyas.Select(i => new InscripcionPublicaDto
             {
@@ -72,37 +72,24 @@ namespace RegistroEstudiantil.Application.Services
             }).ToList();
         }
 
-        public async Task<IReadOnlyList<InscripcionInfoDto>> GetByOtroEstudianteAsync(int estudianteId)
+        public async Task<IReadOnlyList<InscripcionInfoDto>> ObtenerPorOtroEstudianteAsync(int estudianteId)
         {
-            await GetRequiredEstudianteAsync();
+            await ObtenerEstudianteRequeridoAsync();
 
-            var estudianteObjetivo = await _unitOfWork.Repository<Estudiante>().GetByIdAsync(estudianteId);
+            var estudianteObjetivo = await _unitOfWork.EstudianteRepo.ObtenerPorIdAsync(estudianteId);
             if (estudianteObjetivo is null)
             {
                 throw new NotFoundException("Estudiante no encontrado.");
             }
 
-            return await _unitOfWork.InscripcionRepo.GetInscripcionesByEstudianteAsync(estudianteId);
+            return await _unitOfWork.InscripcionRepo.ObtenerInscripcionesPorEstudianteAsync(estudianteId);
         }
 
-        public async Task<CreditosDto> MisCreditosAsync(string periodo)
+       
+        public async Task EliminarAsync(int inscripcionId)
         {
-            var estudiante = await GetRequiredEstudianteAsync();
-            var periodoNormalizado = periodo.Trim().ToUpperInvariant();
-            var countMaterias = await _unitOfWork.InscripcionRepo.CountByEstudiantePeriodoAsync(estudiante.Id, periodoNormalizado);
-            var usados = countMaterias * 3;
-
-            return new CreditosDto
-            {
-                Usados = usados,
-                Restantes = Math.Max(0, 9 - usados)
-            };
-        }
-
-        public async Task DeleteAsync(int inscripcionId)
-        {
-            var estudiante = await GetRequiredEstudianteAsync();
-            var inscripcion = await _unitOfWork.InscripcionRepo.GetByIdAsync(inscripcionId);
+            var estudiante = await ObtenerEstudianteRequeridoAsync();
+            var inscripcion = await _unitOfWork.InscripcionRepo.ObtenerPorIdAsync(inscripcionId);
 
             if (inscripcion is null)
             {
@@ -114,27 +101,27 @@ namespace RegistroEstudiantil.Application.Services
                 throw new ForbiddenException("No puedes eliminar esta inscripcion.");
             }
 
-            await _unitOfWork.InscripcionRepo.DeleteAsync(inscripcionId);
-            await _unitOfWork.SaveAsync();
+            await _unitOfWork.InscripcionRepo.EliminarAsync(inscripcionId);
+            await _unitOfWork.GuardarCambiosAsync();
         }
 
-        public Task<IReadOnlyList<GrupoInfoDto>> GetGruposInfoAsync()
-            => _unitOfWork.InscripcionRepo.GetGruposInfoAsync();
+        public Task<IReadOnlyList<GrupoInfoDto>> ObtenerInfoGruposAsync()
+            => _unitOfWork.InscripcionRepo.ObtenerInfoGruposAsync();
 
-        public async Task<IReadOnlyList<InscripcionInfoDto>> GetByEstudianteAsync()
+        public async Task<IReadOnlyList<InscripcionInfoDto>> ObtenerPorEstudianteAsync()
         {
-            var estudiante = await GetRequiredEstudianteAsync();
-            return await _unitOfWork.InscripcionRepo.GetInscripcionesByEstudianteAsync(estudiante.Id);
+            var estudiante = await ObtenerEstudianteRequeridoAsync();
+            return await _unitOfWork.InscripcionRepo.ObtenerInscripcionesPorEstudianteAsync(estudiante.Id);
         }
 
         public async Task<IReadOnlyList<string>> ObtenerInscripcionesYCompanierosAsync()
         {
-            var estudiante = await GetRequiredEstudianteAsync();
+            var estudiante = await ObtenerEstudianteRequeridoAsync();
             var inscripciones = await _unitOfWork.InscripcionRepo.ObtenerPorEstudianteAsync(estudiante.Id);
 
             if (!inscripciones.Any())
             {
-                throw new NotFoundException("No se encontraron inscripciones para este estudiante.");
+                return [];
             }
 
             var grupoIds = inscripciones.Select(i => i.GrupoClaseId).Distinct().ToList();
@@ -145,15 +132,14 @@ namespace RegistroEstudiantil.Application.Services
                 .ToList();
         }
 
-        private async Task<Estudiante> GetRequiredEstudianteAsync()
+        private async Task<Estudiante> ObtenerEstudianteRequeridoAsync()
         {
             if (!_currentUserService.UserId.HasValue)
             {
                 throw new UnauthorizedException("Usuario no autenticado.");
             }
 
-            var estudiante = (await _unitOfWork.Repository<Estudiante>().ListAsync(
-                e => e.UsuarioId == _currentUserService.UserId.Value)).FirstOrDefault();
+            var estudiante = await _unitOfWork.EstudianteRepo.ObtenerPorUsuarioIdAsync(_currentUserService.UserId.Value);
 
             if (estudiante is null)
             {
