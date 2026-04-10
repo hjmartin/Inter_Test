@@ -23,20 +23,18 @@ namespace RegistroEstudiantil.Application.Services
             _mapper = mapper;
             _currentUserService = currentUserService;
         }
-
-        public async Task<IReadOnlyList<EstudianteDTO>> ObtenerActualAsync()
+        public async Task<EstudianteDTO> ObtenerPorIdAsync(int id)
         {
-            var userId = ObtenerIdUsuarioRequerido();
-            var estudiantes = await _unitOfWork.EstudianteRepo.ObtenerPorUsuarioAsync(userId);
-            return _mapper.Map<List<EstudianteDTO>>(estudiantes);
+            var estudiante = await _unitOfWork.EstudianteRepo.ObtenerPorIdAsync(id);
+            if (estudiante is null)
+            {
+                throw new NotFoundException("Estudiante no encontrado.");
+            }
+
+            return _mapper.Map<EstudianteDTO>(estudiante);
         }
 
-        public async Task<IReadOnlyList<EstudianteDTO>> ObtenerTodosAsync()
-        {
-            var estudiantes = await _unitOfWork.EstudianteRepo.ObtenerTodosOrdenadosAsync();
-            return _mapper.Map<List<EstudianteDTO>>(estudiantes);
-        }
-
+      
         public async Task<EstudianteDTO> CrearAsync(EstudianteCreacionDTO dto)
         {
             var userId = ObtenerIdUsuarioRequerido();
@@ -73,16 +71,6 @@ namespace RegistroEstudiantil.Application.Services
             await _unitOfWork.GuardarCambiosAsync();
         }
 
-        public async Task<EstudianteDTO> ObtenerPorIdAsync(int id)
-        {
-            var estudiante = await _unitOfWork.EstudianteRepo.ObtenerPorIdAsync(id);
-            if (estudiante is null)
-            {
-                throw new NotFoundException("Estudiante no encontrado.");
-            }
-
-            return _mapper.Map<EstudianteDTO>(estudiante);
-        }
 
         public async Task EliminarAsync(int id)
         {
@@ -106,6 +94,18 @@ namespace RegistroEstudiantil.Application.Services
 
             _unitOfWork.EstudianteRepo.Eliminar(estudiante);
             await _unitOfWork.GuardarCambiosAsync();
+        }
+        public async Task<IReadOnlyList<EstudianteDTO>> ObtenerActualAsync()
+        {
+            var userId = ObtenerIdUsuarioRequerido();
+            var estudiantes = await _unitOfWork.EstudianteRepo.ObtenerPorUsuarioAsync(userId);
+            return _mapper.Map<List<EstudianteDTO>>(estudiantes);
+        }
+
+        public async Task<IReadOnlyList<EstudianteDTO>> ObtenerTodosAsync()
+        {
+            var estudiantes = await _unitOfWork.EstudianteRepo.ObtenerTodosOrdenadosAsync();
+            return _mapper.Map<List<EstudianteDTO>>(estudiantes);
         }
 
         private int ObtenerIdUsuarioRequerido()

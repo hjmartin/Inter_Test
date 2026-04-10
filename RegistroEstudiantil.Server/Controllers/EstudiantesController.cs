@@ -25,18 +25,11 @@ namespace RegistroEstudiantil.Server.Controllers
             _outputCacheStore = outputCacheStore;
         }
 
-        [HttpGet]
-        [OutputCache(Tags = [CacheTag])]
-        public async Task<List<EstudianteDTO>> Get()
+        //[AllowAnonymous]
+        [HttpGet("{id:int}", Name = "GetById")]
+        public async Task<IActionResult> GetById(int id)
         {
-            return (await _estudianteApplicationService.ObtenerActualAsync()).ToList();
-        }
-
-        [HttpGet("todos")]
-        [OutputCache(Tags = [CacheTag])]
-        public async Task<List<EstudianteDTO>> GetTodos()
-        {
-            return (await _estudianteApplicationService.ObtenerTodosAsync()).ToList();
+            return Ok(await _estudianteApplicationService.ObtenerPorIdAsync(id));
         }
 
         [HttpPost]
@@ -48,7 +41,6 @@ namespace RegistroEstudiantil.Server.Controllers
             return CreatedAtAction(nameof(GetById), new { id = estudiante.Id }, estudiante);
         }
 
-        [Authorize]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Put(int id, [FromBody] EstudianteUpdateDTO dto)
         {
@@ -56,13 +48,20 @@ namespace RegistroEstudiantil.Server.Controllers
             await _outputCacheStore.EvictByTagAsync(CacheTag, default);
             return NoContent();
         }
-
-        [AllowAnonymous]
-        [HttpGet("{id:int}", Name = "GetById")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpGet("todos")]
+        [OutputCache(Tags = [CacheTag])]
+        public async Task<List<EstudianteDTO>> GetTodos()
         {
-            return Ok(await _estudianteApplicationService.ObtenerPorIdAsync(id));
+            return (await _estudianteApplicationService.ObtenerTodosAsync()).ToList();
         }
+
+        [HttpGet]
+        [OutputCache(Tags = [CacheTag])]
+        public async Task<List<EstudianteDTO>> Get()
+        {
+            return (await _estudianteApplicationService.ObtenerActualAsync()).ToList();
+        }
+
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
