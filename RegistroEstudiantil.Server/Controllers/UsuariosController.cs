@@ -33,7 +33,6 @@ namespace RegistroEstudiantil.Server.Controllers
             return Ok(respuesta);
         }
 
-        [Authorize]
         [HttpGet("me")]
         public IActionResult Me()
         {

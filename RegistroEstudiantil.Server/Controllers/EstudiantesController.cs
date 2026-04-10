@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using RegistroEstudiantil.Application.DTOs;
-using RegistroEstudiantil.Application.DTOs.Shared;
 using RegistroEstudiantil.Application.Services.Interfaces;
 
 
@@ -28,11 +27,9 @@ namespace RegistroEstudiantil.Server.Controllers
 
         [HttpGet]
         [OutputCache(Tags = [CacheTag])]
-        public async Task<List<EstudianteDTO>> Get([FromQuery] PaginacionDTO paginacionDTO)
+        public async Task<List<EstudianteDTO>> Get()
         {
-            var result = await _estudianteApplicationService.ObtenerActualAsync(paginacionDTO);
-            HttpContext.Response.Headers.Append("cantidad-total-registros", result.TotalCount.ToString());
-            return result.Items.ToList();
+            return (await _estudianteApplicationService.ObtenerActualAsync()).ToList();
         }
 
         [HttpGet("todos")]

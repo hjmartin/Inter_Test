@@ -23,8 +23,7 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(originesPermitidos)
             .AllowAnyMethod()
-            .AllowAnyHeader()
-            .WithExposedHeaders("cantidad-total-registros");
+            .AllowAnyHeader();
     });
 });
 

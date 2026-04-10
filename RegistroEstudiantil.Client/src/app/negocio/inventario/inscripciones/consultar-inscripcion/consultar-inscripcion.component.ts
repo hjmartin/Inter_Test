@@ -1,16 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import Swal from 'sweetalert2';
 import { extraerErrores } from '../../../../compartidos/funciones/extraerErrores';
-import { PaginacionDTO } from '../../../../dtos/PaginacionDTO';
 import {
   GrupoInfoDto,
   InscripcionCreateDto,
@@ -21,7 +18,7 @@ import { InscripcionService } from '../../../../services/inventarios/inscripcion
 
 @Component({
   selector: 'app-consultar-inscripcion',
-  imports: [CommonModule, FormsModule, MatTableModule, MatButtonModule, MatIconModule, MatPaginatorModule, RouterModule],
+  imports: [CommonModule, FormsModule, MatTableModule, MatButtonModule, MatIconModule, RouterModule],
   templateUrl: './consultar-inscripcion.component.html',
   styleUrl: './consultar-inscripcion.component.css'
 })
@@ -38,15 +35,8 @@ export class ConsultarInscripcionComponent implements OnInit {
   }
 
   cargarDatos(): void {
-    const paginacion: PaginacionDTO = {
-      pagina: 1,
-      recordsPorPagina: 10
-    };
-
-    this.estudianteService.obtenerPaginado(paginacion).subscribe({
-      next: (resEstudiante: HttpResponse<any[]>) => {
-        const estudiantes = resEstudiante.body ?? [];
-
+    this.estudianteService.obtenerActual().subscribe({
+      next: (estudiantes: any[]) => {
         if (estudiantes.length === 0) {
           Swal.fire({
             icon: 'warning',
@@ -69,7 +59,7 @@ export class ConsultarInscripcionComponent implements OnInit {
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text: 'Ocurrió un error al cargar las inscripciones o grupos.',
+              text: 'Ocurrio un error al cargar las inscripciones o grupos.',
               confirmButtonText: 'Aceptar'
             });
           }
@@ -79,7 +69,7 @@ export class ConsultarInscripcionComponent implements OnInit {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Ocurrió un error al obtener los estudiantes.',
+          text: 'Ocurrio un error al obtener los estudiantes.',
           confirmButtonText: 'Aceptar'
         });
       }
@@ -102,7 +92,7 @@ export class ConsultarInscripcionComponent implements OnInit {
       text: 'Se va a registrar la inscripción',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonText: 'Sí, guardar',
+      confirmButtonText: 'Si­, guardar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (!result.isConfirmed) {
@@ -133,7 +123,7 @@ export class ConsultarInscripcionComponent implements OnInit {
           } else if (err?.error?.mensaje) {
             mensajes = [err.error.mensaje];
           } else {
-            mensajes = ['Ocurrió un error inesperado.'];
+            mensajes = ['Ocurrio un error inesperado.'];
           }
 
           Swal.fire({
@@ -148,13 +138,13 @@ export class ConsultarInscripcionComponent implements OnInit {
 
   eliminarInscripcion(inscripcion: InscripcionInfoDto): void {
     Swal.fire({
-      title: '¿Estás seguro?',
-      text: `¿Deseas eliminar la inscripción de "${inscripcion.materia}"?`,
+      title: '¿Estáss seguro?',
+      text: `Â¿Deseas eliminar la inscripción de "${inscripcion.materia}"?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminar',
+      confirmButtonText: 'Si, eliminar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (!result.isConfirmed) {

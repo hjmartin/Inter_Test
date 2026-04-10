@@ -1,10 +1,8 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
-import { PaginacionDTO } from '../../dtos/PaginacionDTO';
 import { Observable } from 'rxjs/internal/Observable';
 import { EstudianteCreacionDTO, EstudianteDTO, EstudianteUpdateDTO } from '../../dtos/inventarios/estudianteDTO';
-import { construirQueryParams } from '../../compartidos/funciones/construirQueryParams';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +14,8 @@ export class EstudianteService {
   private http = inject(HttpClient);
   private urlBase = environment.apiURL + '/Estudiantes'
 
-  public obtenerPaginado(paginacion: PaginacionDTO): Observable<HttpResponse<EstudianteDTO[]>> {
-    let queryParametros = construirQueryParams(paginacion);
-    return this.http.get<EstudianteDTO[]>(this.urlBase, { params: queryParametros, observe: 'response' });
+  public obtenerActual(): Observable<EstudianteDTO[]> {
+    return this.http.get<EstudianteDTO[]>(this.urlBase);
   }
 
   public obtenerPorId(id: number): Observable<EstudianteDTO> {

@@ -7,8 +7,7 @@ namespace RegistroEstudiantil.Application.Interfaces.Persistence
         Task<Estudiante?> ObtenerPorIdAsync(int id);
         Task<Estudiante?> ObtenerPorUsuarioIdAsync(int usuarioId);
         Task<IReadOnlyList<Estudiante>> ObtenerTodosOrdenadosAsync();
-        Task<IReadOnlyList<Estudiante>> ObtenerPaginaPorUsuarioAsync(int usuarioId, int page, int pageSize);
-        Task<int> ContarPorUsuarioAsync(int usuarioId);
+        Task<IReadOnlyList<Estudiante>> ObtenerPorUsuarioAsync(int usuarioId);
         Task<bool> ExistePorUsuarioIdAsync(int usuarioId);
         Task<bool> ExistePorDocumentoAsync(string documento);
         void Agregar(Estudiante estudiante);

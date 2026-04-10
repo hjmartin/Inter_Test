@@ -26,17 +26,12 @@ namespace RegistroEstudiantil.Infrastructure.Repository
                 .OrderBy(x => x.Nombres)
                 .ToListAsync();
 
-        public async Task<IReadOnlyList<Estudiante>> ObtenerPaginaPorUsuarioAsync(int usuarioId, int page, int pageSize) =>
+        public async Task<IReadOnlyList<Estudiante>> ObtenerPorUsuarioAsync(int usuarioId) =>
             await _db.Estudiantes
                 .AsNoTracking()
                 .Where(x => x.UsuarioId == usuarioId)
                 .OrderBy(x => x.Nombres)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
                 .ToListAsync();
-
-        public Task<int> ContarPorUsuarioAsync(int usuarioId) =>
-            _db.Estudiantes.CountAsync(x => x.UsuarioId == usuarioId);
 
         public Task<bool> ExistePorUsuarioIdAsync(int usuarioId) =>
             _db.Estudiantes.AnyAsync(x => x.UsuarioId == usuarioId);

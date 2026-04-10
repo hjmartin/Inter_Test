@@ -1,15 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import Swal from 'sweetalert2';
-import { PaginacionDTO } from '../../../../dtos/PaginacionDTO';
 import { EstudianteDTO } from '../../../../dtos/inventarios/estudianteDTO';
 import { InscripcionInfoDto } from '../../../../dtos/inventarios/inscripcionesDTO';
 import { EstudianteService } from '../../../../services/inventarios/estudiante.service';
@@ -17,7 +14,7 @@ import { InscripcionService } from '../../../../services/inventarios/inscripcion
 
 @Component({
   selector: 'app-consultar-otros',
-  imports: [CommonModule, FormsModule, MatTableModule, MatButtonModule, MatIconModule, MatPaginatorModule, RouterModule],
+  imports: [CommonModule, FormsModule, MatTableModule, MatButtonModule, MatIconModule, RouterModule],
   templateUrl: './consultar-otros.component.html',
   styleUrl: './consultar-otros.component.css'
 })
@@ -35,15 +32,8 @@ export class ConsultarOtrosComponent implements OnInit {
   }
 
   cargarDatos(): void {
-    const paginacion: PaginacionDTO = {
-      pagina: 1,
-      recordsPorPagina: 10
-    };
-
-    this.estudianteService.obtenerPaginado(paginacion).subscribe({
-      next: (resEstudiante: HttpResponse<EstudianteDTO[]>) => {
-        const estudiantes = resEstudiante.body ?? [];
-
+    this.estudianteService.obtenerActual().subscribe({
+      next: (estudiantes: EstudianteDTO[]) => {
         if (estudiantes.length === 0) {
           Swal.fire({
             icon: 'warning',
@@ -70,7 +60,7 @@ export class ConsultarOtrosComponent implements OnInit {
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text: 'Ocurrió un error al cargar la lista de estudiantes.',
+              text: 'Ocurrio un error al cargar la lista de estudiantes.',
               confirmButtonText: 'Aceptar'
             });
           }
@@ -80,7 +70,7 @@ export class ConsultarOtrosComponent implements OnInit {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Ocurrió un error al obtener los estudiantes.',
+          text: 'Ocurrio un error al obtener los estudiantes.',
           confirmButtonText: 'Aceptar'
         });
       }
@@ -109,7 +99,7 @@ export class ConsultarOtrosComponent implements OnInit {
       error: (err) => {
         this.listaOtrasInscripciones = [];
 
-        const mensaje = err?.error?.mensaje ?? 'Ocurrió un error al consultar los registros del estudiante.';
+        const mensaje = err?.error?.mensaje ?? 'Ocurrio un error al consultar los registros del estudiante.';
         Swal.fire({
           icon: 'error',
           title: 'Error al consultar',

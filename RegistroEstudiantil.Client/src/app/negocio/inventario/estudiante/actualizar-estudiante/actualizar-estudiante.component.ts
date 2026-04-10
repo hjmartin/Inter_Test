@@ -77,7 +77,7 @@ export class ActualizarEstudianteComponent implements OnInit {
         });
       },
       error: (error) => {
-        console.error('Error al obtener producto por ID', error);
+        console.error('Error al obtener  por ID', error);
       }
     });
   }
@@ -88,7 +88,7 @@ export class ActualizarEstudianteComponent implements OnInit {
     if (this.formulario.valid) {
       Swal.fire({
         title: '¿Estás seguro?',
-        text: '¿Deseas guardar los cambios del producto?',
+        text: '¿Deseas guardar los cambios?',
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Si­, guardar',
@@ -107,7 +107,7 @@ export class ActualizarEstudianteComponent implements OnInit {
               // âœ… Mostrar alerta y esperar a que el usuario le dÃ© OK
               Swal.fire({
                 title: '¡Guardado!',
-                text: 'El producto fue actualizado correctamente.',
+                text: 'El estudiante fue actualizado correctamente.',
                 icon: 'success',
                 confirmButtonText: 'OK'
               }).then(() => {
@@ -117,7 +117,7 @@ export class ActualizarEstudianteComponent implements OnInit {
 
             },
             error: (error) => {
-              console.error('Error al actualizar producto', error);
+              console.error('Error al actualizar ', error);
               Swal.fire('Error', 'Ocurrio un error al guardar los cambios.', 'error');
             }
           });

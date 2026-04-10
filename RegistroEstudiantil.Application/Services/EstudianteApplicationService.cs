@@ -1,8 +1,6 @@
 using AutoMapper;
 using RegistroEstudiantil.Application.Common.Exceptions;
-using RegistroEstudiantil.Application.Common.Models;
 using RegistroEstudiantil.Application.DTOs;
-using RegistroEstudiantil.Application.DTOs.Shared;
 using RegistroEstudiantil.Application.Interfaces.Persistence;
 using RegistroEstudiantil.Application.Interfaces.Security;
 using RegistroEstudiantil.Application.Services.Interfaces;
@@ -26,27 +24,11 @@ namespace RegistroEstudiantil.Application.Services
             _currentUserService = currentUserService;
         }
 
-        public async Task<PagedResult<EstudianteDTO>> ObtenerActualAsync(PaginacionDTO paginacionDTO)
+        public async Task<IReadOnlyList<EstudianteDTO>> ObtenerActualAsync()
         {
             var userId = ObtenerIdUsuarioRequerido();
-            var estudiante = await _unitOfWork.EstudianteRepo.ObtenerPorUsuarioIdAsync(userId);
-
-            if (estudiante is null)
-            {
-                return new PagedResult<EstudianteDTO>();
-            }
-
-            var items = await _unitOfWork.EstudianteRepo.ObtenerPaginaPorUsuarioAsync(
-                userId,
-                paginacionDTO.Pagina,
-                paginacionDTO.RecordsPorPagina);
-            var totalCount = await _unitOfWork.EstudianteRepo.ContarPorUsuarioAsync(userId);
-
-            return new PagedResult<EstudianteDTO>
-            {
-                Items = _mapper.Map<List<EstudianteDTO>>(items),
-                TotalCount = totalCount
-            };
+            var estudiantes = await _unitOfWork.EstudianteRepo.ObtenerPorUsuarioAsync(userId);
+            return _mapper.Map<List<EstudianteDTO>>(estudiantes);
         }
 
         public async Task<IReadOnlyList<EstudianteDTO>> ObtenerTodosAsync()
