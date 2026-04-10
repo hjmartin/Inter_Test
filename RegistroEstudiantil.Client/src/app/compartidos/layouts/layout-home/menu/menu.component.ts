@@ -2,13 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
-import { AutorizadoComponent } from '../../../../auth/autorizado/autorizado.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AuthService } from '../../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-menu',
-  imports: [MatButtonModule, MatIconModule, MatToolbarModule, RouterLink, AutorizadoComponent],
+  imports: [MatButtonModule, MatIconModule, MatToolbarModule, RouterLink],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css'
 })

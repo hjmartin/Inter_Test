@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit {
 
     this.seguridadService.login(credenciales).subscribe({
       next: () => {
-        this.router.navigate(['/inventario/dashboard']);
+        this.router.navigate(['/inventario/estudiantes/consultar']);
       },
       error: err => {
         if (Array.isArray(err?.error)) {

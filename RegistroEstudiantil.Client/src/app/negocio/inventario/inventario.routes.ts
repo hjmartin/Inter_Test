@@ -10,7 +10,7 @@ import { esAdminGuard } from '../../auth/guards/es-admin.guard';
 
 export const INVENTARIO_ROUTES: Routes = [
 
-  { path: 'dashboard', component: ViewAdministrativoComponent, canActivate: [esAdminGuard]},
+ // { path: 'dashboard', component: ViewAdministrativoComponent, canActivate: [esAdminGuard]},
  
   //Salidas
   { path: 'estudiantes/consultar', component: PerfilEstudianteComponent,canActivate: [esAdminGuard] },
