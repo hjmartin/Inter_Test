@@ -1,6 +1,6 @@
-﻿#nullable enable
+#nullable enable
 
-namespace RegistroEstudiantil.Application.Common.Security
+namespace RegistroEstudiantil.Application.Interfaces.Security
 {
     public interface ICurrentUserService
     {
@@ -9,5 +9,3 @@ namespace RegistroEstudiantil.Application.Common.Security
         string? Role { get; }
     }
 }
-
-

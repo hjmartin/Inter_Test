@@ -1,10 +1,10 @@
 using AutoMapper;
 using RegistroEstudiantil.Application.Common.Exceptions;
 using RegistroEstudiantil.Application.Common.Models;
-using RegistroEstudiantil.Application.Common.Security;
 using RegistroEstudiantil.Application.DTOs;
 using RegistroEstudiantil.Application.DTOs.Shared;
 using RegistroEstudiantil.Application.Interfaces.Persistence;
+using RegistroEstudiantil.Application.Interfaces.Security;
 using RegistroEstudiantil.Application.Services.Interfaces;
 using RegistroEstudiantil.Domain.Entities;
 

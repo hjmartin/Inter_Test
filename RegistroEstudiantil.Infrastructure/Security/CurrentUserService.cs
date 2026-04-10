@@ -2,7 +2,7 @@
 
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using RegistroEstudiantil.Application.Common.Security;
+using RegistroEstudiantil.Application.Interfaces.Security;
 
 namespace RegistroEstudiantil.Infrastructure.Security
 {
